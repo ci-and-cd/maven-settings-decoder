@@ -1,10 +1,12 @@
 # maven-settings-decoder
-
-
-A tool to decrypt the XML node text stored in maven settings.xml files
 ===========================================================================
 
+A tool to decrypt the XML node text stored in maven settings.xml files
+
+Inspired by [jelmerk/maven-settings-decoder](https://github.com/jelmerk/maven-settings-decoder)
+
 Maven 2.1.0+  supports [server password encryption](http://maven.apache.org/guides/mini/guide-encryption.html)
+
 This tool lets you decrypt these encrypted text as long as you have access to both the settings.xml file and the 
 settings-security.xml file.
 
@@ -29,3 +31,17 @@ Example:
         -ss "${HOME}/.m2/settings-security.xml" \
         -x "//server[id='local-nexus-releases']/password/text()"
 
+Use as a lib.
+
+Maven:
+
+        <repositories>
+            <repository>
+                <id>maven-settings-decoder-mvn-repo</id>
+                <url>https://raw.github.com/chshawkn/maven-settings-decoder/mvn-repo/</url>
+                <snapshots>
+                    <enabled>true</enabled>
+                    <updatePolicy>always</updatePolicy>
+                </snapshots>
+            </repository>
+        </repositories>
