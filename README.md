@@ -17,7 +17,7 @@ settings-security.xml file.
 
     or set '-s' and '-ss' in MAVEN_SETTINGS environment variable.
 
-Example:
+Use as a command-line tool:
 
     java -jar target/maven-settings-decoder-*-exec.jar \
         -s "${HOME}/.m2/settings.xml" \
@@ -31,9 +31,28 @@ Example:
         -ss "${HOME}/.m2/settings-security.xml" \
         -x "//server[id='local-nexus-releases']/password/text()"
 
-Use as a lib.
+Use as gradle buildscript dependency, so we can access maven's settings.xml from our build script:
 
-Maven:
+        buildscript {
+          repositories {
+            ...
+            maven { url 'https://raw.github.com/chshawkn/maven-settings-decoder/mvn-repo/' }
+          }
+          dependencies {
+            ...
+            classpath 'cn.home1.tools:maven-settings-decoder:1.0.0.OSS-SNAPSHOT'
+          }
+        }
+        ...
+        ext.mavenSettings = new cn.home1.tools.maven.SettingsDecoder();
+        ext.nexusSnapshotsUser = mavenSettings.getText("//server[id='${nexus}-snapshots']/username/text()")
+        ext.nexusSnapshotsPass = mavenSettings.getText("//server[id='${nexus}-snapshots']/password/text()")
+        println "${nexus}-snapshots username: " + mavenSettings.getText("//server[id='${nexus}-snapshots']/username/text()")
+        println "${nexus}-snapshots password: " + mavenSettings.getText("//server[id='${nexus}-snapshots']/password/text()")
+        ...
+        
+
+Use as maven dependency:
 
         <repositories>
             <repository>
