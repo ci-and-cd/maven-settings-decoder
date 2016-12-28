@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>cn.home1.tools</groupId>
+  <artifactId>maven-settings-decoder</artifactId>
+  <versioning>
+    <versions>
+      <version>1.0.0.OSS-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20161228061153</lastUpdated>
+  </versioning>
+</metadata>
