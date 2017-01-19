@@ -81,10 +81,10 @@ public class SettingsDecoder {
     } else {
       securityFilePath = securityFileOpt;
     }
-    this.settings = readSettings(settingsFile);
+    this.settings = readSettings(this.settingsFile);
 
     final File securityFile = new File(securityFilePath);
-    if (!settingsFile.exists()) {
+    if (!securityFile.exists()) {
       //throw new IllegalArgumentException( //
       //    String.format("Security file : %s does not exist%n", securityFile.getAbsolutePath()));
       this.plainTextMasterPassword = null;
@@ -138,7 +138,8 @@ public class SettingsDecoder {
 
   private static Options createOptions() {
     Options options = new Options();
-    options.addOption(SETTINGS_SECURITY_FILE_SHORT_OPT, SETTINGS_SECURITY_FILE_LONG_OPT, true, "location of settings-security.xml.");
+    options.addOption( //
+        SETTINGS_SECURITY_FILE_SHORT_OPT, SETTINGS_SECURITY_FILE_LONG_OPT, true, "location of settings-security.xml.");
     options.addOption(SETTINGS_FILE_SHORT_OPT, SETTINGS_FILE_LONG_OPT, true, "location of settings.xml file.");
     options.addOption(XPATH_SHORT_OPT, XPATH_LONG_OPT, true, "xml-path in settings.xml, only node text is supported.");
     options.addOption(DEBUG_SHORT_OPT, DEBUG_LONG_OPT, true, "produce execution debug output.");
@@ -149,7 +150,7 @@ public class SettingsDecoder {
     new HelpFormatter().printHelp("maven-settings-decoder", options);
   }
 
-  private static Settings readSettings(final File file) throws IOException, XmlPullParserException {
+  static Settings readSettings(final File file) throws IOException, XmlPullParserException {
     return new SettingsXpp3Reader().read(new FileInputStream(file));
   }
 
@@ -164,8 +165,8 @@ public class SettingsDecoder {
     return result;
   }
 
-  private static String decodeMasterPassword(final String encodedMasterPassword) throws PlexusCipherException {
-    //final String key = org.sonatype.plexus.components.sec.dispatcher.DefaultSecDispatcher.SYSTEM_PROPERTY_SEC_LOCATION;
+  static String decodeMasterPassword(final String encodedMasterPassword) throws PlexusCipherException {
+    // key = org.sonatype.plexus.components.sec.dispatcher.DefaultSecDispatcher.SYSTEM_PROPERTY_SEC_LOCATION;
     final String key = "settings.security";
     return decodeText(encodedMasterPassword, key);
   }
@@ -183,15 +184,15 @@ public class SettingsDecoder {
     return result != null ? result.toString() : null;
   }
 
-  private static String encodedMasterPassword(final File file) throws Exception {
+  static String encodedMasterPassword(final File file) throws Exception {
     return xmlNodeText(file, "/settingsSecurity/master/text()");
   }
 
-//  private static String encodedMasterPassword( //
-//      final File file //
-//  ) throws org.sonatype.plexus.components.sec.dispatcher.SecDispatcherException { //
-//    final org.sonatype.plexus.components.sec.dispatcher.model.SettingsSecurity settingsSecurity = //
-//        org.sonatype.plexus.components.sec.dispatcher.SecUtil.read(file.getAbsolutePath(), true);
-//    return settingsSecurity.getMaster();
-//  }
+  //  private static String encodedMasterPassword( //
+  //      final File file //
+  //  ) throws org.sonatype.plexus.components.sec.dispatcher.SecDispatcherException { //
+  //    final org.sonatype.plexus.components.sec.dispatcher.model.SettingsSecurity settingsSecurity = //
+  //        org.sonatype.plexus.components.sec.dispatcher.SecUtil.read(file.getAbsolutePath(), true);
+  //    return settingsSecurity.getMaster();
+  //  }
 }
