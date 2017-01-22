@@ -9,24 +9,18 @@
     <packaging>jar</packaging>
     <version>1.0.0.OSS-SNAPSHOT</version>
 
+    <scm>
+        <connection>scm:git:https://github.com/chshawkn/maven-settings-decoder.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/chshawkn/maven-settings-decoder.git</developerConnection>
+        <url>https://github.com/chshawkn/maven-settings-decoder</url>
+    </scm>
+
     <properties>
         <java.version>1.8</java.version>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        <!-- github server corresponds to entry in ~/.m2/settings.xml -->
-        <github.global.server>github-chshawkn</github.global.server>
     </properties>
-
-    <!-- see: http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github -->
-    <distributionManagement>
-        <repository>
-            <id>internal.repo</id>
-            <name>Temporary Staging Repository</name>
-            <url>file://${project.build.directory}/mvn-repo</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <plugins>
@@ -131,42 +125,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
-                <configuration>
-                    <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>0.12</version>
-                <configuration>
-                    <!-- git commit message -->
-                    <message>Maven artifacts for ${project.version}</message>
-                    <!-- disable webpage processing -->
-                    <noJekyll>true</noJekyll>
-                    <!-- matches distribution management repository url above -->
-                    <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-                    <!-- remote branch name -->
-                    <branch>refs/heads/mvn-repo</branch>
-                    <includes><include>**/*</include></includes>
-                    <!-- github repo name -->
-                    <repositoryName>maven-settings-decoder</repositoryName>
-                    <!-- github username  -->
-                    <repositoryOwner>chshawkn</repositoryOwner>
-                </configuration>
-                <executions>
-                    <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>deploy</phase>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
@@ -210,4 +168,177 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <!--
+        <![CDATA[
+        Usage:
+        1. Execute following command and put output (encrypted master password) into ~/.m2/settings-security.xml
+           mvn -emp ${master_password}
+        2. mvn -ep ${your_github_password}
+        3. Put following content into ~/.m2/settings.xml
+            <server>
+                <id>github-${your_github_username}</id>
+                <username>${your_github_account_email}</username>
+                <password>{encrypted_your_github_password}</password>
+            </server>
+        4. To publish a release
+           Following actions can be automated using the maven-release-plugin
+             1. Commit any modifications
+             2. Remove the -SNAPSHOT from the version number
+             3. Deploy the module to the release-repository
+             4. Tag the source code with the version number
+             5. Increment the version number and append -SNAPSHOT
+            see: https://dzone.com/articles/configuring-the-maven-release-plugin-to-skip-tests
+
+              mvn -DpreparationGoals=compile -Darguments="" release:prepare
+              mvn -Darguments="-DskipTests" release:perform
+
+            Delete tag on release failed, see: https://www.abeautifulsite.net/how-to-delete-a-tag-on-github
+            Example:
+              git tag -d ${tag}
+              git push origin :${tag}
+        5. To publish a snapshot
+           mvn -Dmaven.test.skip=true clean package deploy
+
+        Note:
+        Create a empty mvn-repo branch on github
+        git checkout \-\-orphan mvn-repo
+        git rm -rf .
+        git commit \-\-allow-empty -m "root commit"
+        git push origin mvn-repo
+
+        Create gpg key on mac
+        brew install gpg
+        execute gpg \-\-list-keys to create trustdb.gpg
+        gpg \-\-list-keys
+
+        see: http://lijingsen.cn/2015/09/03/how-to-generate-gpg-signature-with-maven/
+        see: https://www.gnupg.org/documentation/manuals/gnupg-devel/Unattended-GPG-key-generation.html
+cat >maven_gpg_key_with_default_algorithms <<EOF
+%echo Generating a default key
+Key-Type: default
+Subkey-Type: default
+Name-Real: chshawkn
+Name-Comment: with passphrase
+Name-Email: chshawkn@somedomain.com
+Expire-Date: 0
+Passphrase: passphrase
+%pubring maven_gpg_key.pub
+%secring maven_gpg_key.sec
+# Do a commit here, so that we can later print "done" :-)
+%commit
+%echo done
+EOF
+
+
+        gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms
+        gpg \-\-allow-secret-key-import \-\-import ./maven_gpg_key.sec
+        gpg \-\-import ./maven_gpg_key.pub
+        # List public keys
+        gpg \-\-list-keys
+        # List private keys
+        gpg \-\-list-secret-keys
+
+        Put following content into ~/.m2/settings.xml
+        To get gpg.keyname:
+            gpg \-\-list-secret-keys | grep -E '^sec' | awk '{print $2}' | awk -F/ '{print $2}'
+            gpg \-\-list-keys | grep -E '^pub' | awk '{print $2}' | awk -F/ '{print $2}'
+
+        <servers>
+            <server>
+                <id>gpg.passphrase</id>
+                <passphrase>${gpg.passphrase}</passphrase>
+            </server>
+        </servers>
+        <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <gpg.keyname>${gpg.keyname}</gpg.keyname>
+            </properties>
+        </profile>
+        ]]>
+        -->
+        <profile>
+            <id>release-and-publish-to-github</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- github server corresponds to entry in ~/.m2/settings.xml -->
+                <github.global.server>github-chshawkn</github.global.server>
+            </properties>
+            <!-- see: http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github -->
+            <distributionManagement>
+                <repository>
+                    <id>internal.repo</id>
+                    <name>Temporary Staging Repository</name>
+                    <url>file://${project.build.directory}/mvn-repo</url>
+                </repository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <version>2.5.3</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.maven.scm</groupId>
+                                <artifactId>maven-scm-provider-gitexe</artifactId>
+                                <version>1.9.5</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <mavenExecutorId>forked-path</mavenExecutorId>
+                            <goals>deploy</goals>
+                            <useReleaseProfile>false</useReleaseProfile>
+                            <arguments>${arguments}</arguments>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.8.2</version>
+                        <configuration>
+                            <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo
+                            </altDeploymentRepository>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.github.github</groupId>
+                        <artifactId>site-maven-plugin</artifactId>
+                        <version>0.12</version>
+                        <configuration>
+                            <!-- git commit message -->
+                            <message>Maven artifacts for ${project.version}</message>
+                            <!-- disable webpage processing -->
+                            <noJekyll>true</noJekyll>
+                            <!-- matches distribution management repository url above -->
+                            <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+                            <!-- remote branch name -->
+                            <branch>refs/heads/mvn-repo</branch>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                            <!-- github repo name -->
+                            <repositoryName>${project.artifactId}</repositoryName>
+                            <!-- github username  -->
+                            <repositoryOwner>chshawkn</repositoryOwner>
+                        </configuration>
+                        <executions>
+                            <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+                            <execution>
+                                <goals>
+                                    <goal>site</goal>
+                                </goals>
+                                <phase>deploy</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

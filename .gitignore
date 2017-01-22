@@ -21,3 +21,10 @@ target/
 **/src/site/markdown/src/readme
 **/src/site/resources
 
+# maven-release-plugin
+**/pom.xml.releaseBackup
+**/pom.xml.next
+**/pom.xml.tag
+**/pom.xml.branch
+**/release.properties
+**/pom.xml.backup
