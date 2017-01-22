@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>wagon-maven-plugin</artifactId>
-  <version>1.1-snapshot-chshawkn-1.1</version>
+  <version>1.1-snapshot-chshawkn-1.2</version>
   <packaging>maven-plugin</packaging>
   <name>Wagon Maven Plugin</name>
 
@@ -34,7 +34,7 @@
     <connection>scm:git:https://github.com/chshawkn/wagon-maven-plugin.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/chshawkn/wagon-maven-plugin.git</developerConnection>
     <url>https://github.com/chshawkn/wagon-maven-plugin</url>
-    <tag>wagon-maven-plugin-1.1-snapshot-chshawkn-1.1</tag>
+    <tag>wagon-maven-plugin-1.1-snapshot-chshawkn-1.2</tag>
   </scm>
 
   <issueManagement>
@@ -290,7 +290,13 @@
        mvn -Dmaven.test.skip=true clean package deploy
 
     Note:
-    create gpg key on mac
+    Create a empty mvn-repo branch on github
+    git checkout \-\-orphan mvn-repo
+    git rm -rf .
+    git commit \-\-allow-empty -m "root commit"
+    git push origin mvn-repo
+
+    Create gpg key on mac
     brew install gpg
     execute gpg \-\-list-keys to create trustdb.gpg
     gpg \-\-list-keys
@@ -311,9 +317,7 @@ Passphrase: passphrase
 # Do a commit here, so that we can later print "done" :-)
 %commit
 %echo done
-EOF gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms
-    gpg \-\-allow-secret-key-import \-\-import ./maven_gpg_key.sec
-    gpg \-\-import ./maven_gpg_key.pub
+EOF gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms gpg \-\-allow-secret-key-import \-\-import ./maven_gpg_key.sec gpg \-\-import ./maven_gpg_key.pub
     # List public keys
     gpg \-\-list-keys
     # List private keys
