@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>mojo-parent</artifactId>
+    <groupId>org.codehaus.mojo</groupId>
+    <version>40</version>
+  </parent>
+
+  <artifactId>wagon-maven-plugin</artifactId>
+  <version>1.1-snapshot-chshawkn-1.0-SNAPSHOT</version>
+  <packaging>maven-plugin</packaging>
+  <name>Wagon Maven Plugin</name>
+
+  <description>
+    Maven plugin that can be used to access various operations on a given URL using a supported maven wagon. Supports
+    recursive upload, download, and list directory content functionality.
+  </description>
+  <url>http://www.mojohaus.org/wagon-maven-plugin/</url>
+
+  <inceptionYear>2008</inceptionYear>
+
+  <prerequisites>
+    <maven>3.0</maven>
+  </prerequisites>
+
+  <!--scm>
+    <connection>scm:git:https://github.com/mojohaus/wagon-maven-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/mojohaus/wagon-maven-plugin.git</developerConnection>
+    <url>https://github.com/mojohaus/wagon-maven-plugin/</url>
+  </scm-->
+  <scm>
+    <connection>scm:git:https://github.com/chshawkn/wagon-maven-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/chshawkn/wagon-maven-plugin.git</developerConnection>
+    <url>https://github.com/chshawkn/wagon-maven-plugin</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/mojohaus/wagon-maven-plugin/issues/</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Travis-CI</system>
+    <url>https://travis-ci.org/mojohaus/wagon-maven-plugin</url>
+  </ciManagement>
+
+  <developers>
+    <developer>
+      <name>Dan T. Tran</name>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>James W. Dumay</name>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Sherali Karimov</name>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <licenses>
+    <license>
+      <name>Apache License 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <properties>
+    <maven.api.version>3.2.5</maven.api.version>
+    <mojo.java.target>1.5</mojo.java.target>
+    <wagon.api.version>2.0</wagon.api.version>
+    <scmpublish.content>${project.build.directory}/staging/wagon-maven-plugin</scmpublish.content>
+
+    <takari-plugin-testing.version>2.9.0</takari-plugin-testing.version>
+    <takari-lifecycle-plugin.version>1.12.2</takari-lifecycle-plugin.version>
+
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>${maven.api.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <version>${maven.api.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-settings</artifactId>
+      <version>${maven.api.version}</version>
+    </dependency>
+
+    <!-- needed by update-maven-3 goal -->
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-compat</artifactId>
+      <version>${maven.api.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-repository-metadata</artifactId>
+      <version>${maven.api.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-provider-api</artifactId>
+      <version>${wagon.api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-ssh</artifactId>
+      <version>2.11-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>plexus-component-api</artifactId>
+          <groupId>org.codehaus.plexus</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>3.0.24</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-archiver</artifactId>
+      <version>3.4</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>file-management</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.9</version>
+    </dependency>
+
+    <!-- needed to debug plugin under m2e -->
+    <dependency>
+      <groupId>io.takari.maven.plugins</groupId>
+      <artifactId>takari-plugin-testing</artifactId>
+      <version>${takari-plugin-testing.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.takari.maven.plugins</groupId>
+      <artifactId>takari-plugin-integration-testing</artifactId>
+      <version>${takari-plugin-testing.version}</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- make maven pull dependencies before test run -->
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-ftp</artifactId>
+      <version>2.11-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-http</artifactId>
+      <version>2.11-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+
+    <defaultGoal>install</defaultGoal>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-maven-plugin</artifactId>
+                    <versionRange>[1.0.0,)</versionRange>
+                    <goals>
+                      <goal>descriptor</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute>
+                      <runOnIncremental>false</runOnIncremental>
+                    </execute>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate</id>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>io.takari.maven.plugins</groupId>
+        <artifactId>takari-lifecycle-plugin</artifactId>
+        <version>${takari-lifecycle-plugin.version}</version>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <id>testProperties</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>testProperties</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
+  </build>
+
+  <profiles>
+    <!--
+    Usage:
+    1. Execute following command and put output (encrypted master password) into ~/.m2/settings-security.xml
+       mvn -emp ${master_password}
+    2. mvn -ep ${your_github_password}
+    3. put following content into ~/.m2/settings.xml
+       &lt;server&gt;
+         &lt;id&gt;github-${your_github_username}&lt;/id&gt;
+         &lt;username&gt;${your_github_account_email}&lt;/username&gt;
+         &lt;password&gt;{encrypted_your_github_password}&lt;/password&gt;
+       &lt;/server&gt;
+    4. To publish a release
+       Following actions can be automated using the maven-release-plugin
+         1. Commit any modifications
+         2. Remove the -SNAPSHOT from the version number
+         3. Deploy the module to the release-repository
+         4. Tag the source code with the version number
+         5. Increment the version number and append -SNAPSHOT
+       mvn clean release:prepare
+       mvn release:perform
+    5. To publish a snapshot
+       mvn clean package deploy
+    -->
+    <profile>
+      <id>release-and-publish-to-github</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <!-- github server corresponds to entry in ~/.m2/settings.xml -->
+        <github.global.server>github-chshawkn</github.global.server>
+      </properties>
+      <!-- see: http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github -->
+      <distributionManagement>
+        <repository>
+          <id>internal.repo</id>
+          <name>Temporary Staging Repository</name>
+          <url>file://${project.build.directory}/mvn-repo</url>
+        </repository>
+      </distributionManagement>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.5.3</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.maven.scm</groupId>
+                    <artifactId>maven-scm-provider-gitexe</artifactId>
+                    <version>1.9.5</version>
+                </dependency>
+            </dependencies>
+            <configuration>
+              <useReleaseProfile>false</useReleaseProfile>
+              <arguments>-Pmojo-release</arguments>
+            </configuration>
+          </plugin>
+          <plugin>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <version>2.8.2</version>
+            <configuration>
+              <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>com.github.github</groupId>
+            <artifactId>site-maven-plugin</artifactId>
+            <version>0.12</version>
+            <configuration>
+              <!-- git commit message -->
+              <message>Maven artifacts for ${project.version}</message>
+              <!-- disable webpage processing -->
+              <noJekyll>true</noJekyll>
+              <!-- matches distribution management repository url above -->
+              <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+              <!-- remote branch name -->
+              <branch>refs/heads/mvn-repo</branch>
+              <includes><include>**/*</include></includes>
+              <!-- github repo name -->
+              <repositoryName>maven-settings-decoder</repositoryName>
+              <!-- github username  -->
+              <repositoryOwner>chshawkn</repositoryOwner>
+            </configuration>
+            <executions>
+              <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+              <execution>
+                <goals>
+                  <goal>site</goal>
+                </goals>
+                <phase>deploy</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
