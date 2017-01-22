@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.home1.tools</groupId>
     <artifactId>maven-settings-decoder</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0.OSS-SNAPSHOT</version>
+    <version>1.0.0.OSS</version>
 
     <scm>
         <connection>scm:git:https://github.com/chshawkn/maven-settings-decoder.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/chshawkn/maven-settings-decoder.git</developerConnection>
         <url>https://github.com/chshawkn/maven-settings-decoder</url>
-    </scm>
+      <tag>maven-settings-decoder-1.0.0.OSS</tag>
+  </scm>
 
     <properties>
         <java.version>1.8</java.version>
@@ -42,7 +41,7 @@
                         <releaseBranchPrefix>release/</releaseBranchPrefix>
                         <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
                         <supportBranchPrefix>support/</supportBranchPrefix>
-                        <versionTagPrefix></versionTagPrefix>
+                        <versionTagPrefix />
                     </gitFlowConfig>
 
                     <commitMessages>
@@ -229,10 +228,7 @@ Passphrase: passphrase
 # Do a commit here, so that we can later print "done" :-)
 %commit
 %echo done
-EOF
-
-
-        gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms
+EOF gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms
         gpg \-\-allow-secret-key-import \-\-import ./maven_gpg_key.sec
         gpg \-\-import ./maven_gpg_key.pub
         # List public keys
