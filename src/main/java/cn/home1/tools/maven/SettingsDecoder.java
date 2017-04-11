@@ -158,7 +158,15 @@ public class SettingsDecoder {
     final String result;
     if (key != null) {
       final Boolean encoded = encodedText != null && encodedText.startsWith("{") && encodedText.endsWith("}");
-      result = encoded ? new DefaultPlexusCipher().decryptDecorated(encodedText, key) : encodedText;
+      final Boolean envVar = encodedText != null && encodedText.startsWith("${env.") && encodedText.endsWith("}");
+      if (encoded) {
+        result = new DefaultPlexusCipher().decryptDecorated(encodedText, key);
+      } else if (envVar) {
+        final String envVarName = encodedText.substring(6, encodedText.length() - 1);
+        result = System.getenv(envVarName);
+      } else {
+        result = encodedText;
+      }
     } else {
       result = encodedText;
     }

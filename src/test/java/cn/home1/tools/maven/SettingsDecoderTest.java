@@ -1,5 +1,8 @@
 package cn.home1.tools.maven;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.junit.Test;
 
@@ -22,6 +25,21 @@ public class SettingsDecoderTest {
     final String encodedMasterPassword = SettingsDecoder.encodedMasterPassword(targetFile);
     System.out.println(encodedMasterPassword);
     System.out.println(SettingsDecoder.decodeMasterPassword(encodedMasterPassword));
+  }
+
+  @Test
+  public void testEnvVar() throws Exception {
+    final File settingsFile = dumpClasspathResourceIntoTmpFile("/settings.xml");
+    final File settingsSecurityFile = dumpClasspathResourceIntoTmpFile("/settings-security.xml");
+    final String plainText = new SettingsDecoder( //
+        settingsFile.getCanonicalPath(), //
+        settingsSecurityFile.getCanonicalPath(), //
+        true //
+    ).getText("//server[id='github']/password/text()");
+    System.out.println(plainText);
+    assertNotNull(plainText);
+    assertFalse(plainText.equals(""));
+    assertFalse(plainText.startsWith("${env.") && plainText.endsWith("}"));
   }
 
   private static File dumpClasspathResourceIntoTmpFile(final String classpathResource) throws IOException {

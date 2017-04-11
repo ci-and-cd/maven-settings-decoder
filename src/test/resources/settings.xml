@@ -16,12 +16,21 @@
         <mirror>
             <id>internal-nexus-mirror</id>
             <name>internal nexus mirror</name>
-            <url>${internal-nexus.prefix}/nexus/content/groups/public/</url>
-            <mirrorOf>central,spring-libs-release,spring-libs-snapshot</mirrorOf>
+            <url>${internal-nexus.mirror}</url>
+            <!--mirrorOf>central,spring-libs-release,spring-milestone,spring-libs-snapshot,conjars.org,clojars.org,org.jboss.repository,codehaus-mule-repo,repo.jenkins-ci.org</mirrorOf-->
+            <mirrorOf>external:*,!github-chshawkn-wagon-maven-plugin</mirrorOf>
         </mirror>
     </mirrors>
 
     <servers>
+        <server>
+            <id>gpg.passphrase</id>
+            <passphrase>${build.gpg.passphrase}</passphrase>
+        </server>
+        <server>
+            <id>github</id>
+            <password>${env.GITHUB_GIT_SERVICE_TOKEN}</password>
+        </server>
         <server>
             <id>internal-nexus-releases</id>
             <username>deployment</username>
@@ -33,6 +42,11 @@
             <password>{RJzAlz+tw54HBhZ3IBzFCuNQY2Wyzqv2EonquIV7hdE=}</password>
         </server>
         <server>
+            <id>internal-nexus-thirdparty</id>
+            <username>deployment</username>
+            <password>{RJzAlz+tw54HBhZ3IBzFCuNQY2Wyzqv2EonquIV7hdE=}</password>
+        </server>
+        <server>
             <id>internal-mvnsite</id>
             <username>root</username>
             <privateKey>${user.home}/.ssh/internal-mvnsite</privateKey>
@@ -40,55 +54,69 @@
     </servers>
 
     <activeProfiles>
-        <activeProfile>internal-nexus</activeProfile>
+        <activeProfile>internal-infrastructure</activeProfile>
     </activeProfiles>
+
+    <pluginGroups>
+        <pluginGroup>org.apache.maven.plugins</pluginGroup>
+        <pluginGroup>org.codehaus.mojo</pluginGroup>
+        <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+    </pluginGroups>
 
     <profiles>
         <profile>
-            <id>internal-nexus</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <gpg.keyname>${build.gpg.keyname}</gpg.keyname>
+            </properties>
+        </profile>
+        <profile>
+            <id>internal-infrastructure</id>
             <repositories>
-                <repository>
-                    <id>internal-nexus-public</id>
-                    <name>internal nexus public</name>
-                    <url>${internal-nexus.prefix}/nexus/content/groups/public</url>
-                    <releases><enabled>true</enabled></releases>
-                    <snapshots><enabled>false</enabled></snapshots>
-                </repository>
                 <repository>
                     <id>internal-nexus-releases</id>
                     <name>internal nexus releases</name>
-                    <url>${internal-nexus.prefix}/nexus/content/repositories/releases</url>
+                    <url>${internal-nexus.repositories}/releases/</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>false</enabled></snapshots>
                 </repository>
                 <repository>
                     <id>internal-nexus-snapshots</id>
                     <name>internal nexus snapshots</name>
-                    <url>${internal-nexus.prefix}/nexus/content/repositories/snapshots</url>
+                    <url>${internal-nexus.repositories}/snapshots/</url>
                     <releases><enabled>false</enabled></releases>
+                    <snapshots><enabled>true</enabled></snapshots>
+                </repository>
+                <repository>
+                    <id>internal-nexus-thirdparty</id>
+                    <name>internal nexus thirdparty</name>
+                    <url>${internal-nexus.repositories}/thirdparty/</url>
+                    <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </repository>
             </repositories>
             <pluginRepositories>
                 <pluginRepository>
-                    <id>internal-nexus-public</id>
-                    <name>internal nexus public</name>
-                    <url>${internal-nexus.prefix}/nexus/content/groups/public</url>
-                    <releases><enabled>true</enabled></releases>
-                    <snapshots><enabled>false</enabled></snapshots>
-                </pluginRepository>
-                <pluginRepository>
                     <id>internal-nexus-releases</id>
                     <name>internal nexus releases</name>
-                    <url>${internal-nexus.prefix}/nexus/content/repositories/releases</url>
+                    <url>${internal-nexus.repositories}/releases/</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>false</enabled></snapshots>
                 </pluginRepository>
                 <pluginRepository>
                     <id>internal-nexus-snapshots</id>
                     <name>internal nexus snapshots</name>
-                    <url>${internal-nexus.prefix}/nexus/content/repositories/snapshots</url>
+                    <url>${internal-nexus.repositories}/snapshots/</url>
                     <releases><enabled>false</enabled></releases>
+                    <snapshots><enabled>true</enabled></snapshots>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>internal-nexus-thirdparty</id>
+                    <name>internal nexus thirdparty</name>
+                    <url>${internal-nexus.repositories}/thirdparty/</url>
+                    <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </pluginRepository>
             </pluginRepositories>
