@@ -3,10 +3,10 @@
   <groupId>cn.home1.tools</groupId>
   <artifactId>maven-settings-decoder</artifactId>
   <versioning>
-    <release>1.0.3.OSS</release>
+    <release>1.0.4.OSS</release>
     <versions>
-      <version>1.0.3.OSS</version>
+      <version>1.0.4.OSS</version>
     </versions>
-    <lastUpdated>20170412184433</lastUpdated>
+    <lastUpdated>20170412185145</lastUpdated>
   </versioning>
 </metadata>
