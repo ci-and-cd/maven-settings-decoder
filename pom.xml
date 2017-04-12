@@ -5,13 +5,13 @@
     <groupId>cn.home1.tools</groupId>
     <artifactId>maven-settings-decoder</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.2.OSS-SNAPSHOT</version>
+    <version>1.0.2.OSS</version>
 
     <scm>
         <connection>scm:git:https://github.com/chshawkn/maven-settings-decoder.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/chshawkn/maven-settings-decoder.git</developerConnection>
         <url>https://github.com/chshawkn/maven-settings-decoder</url>
-        <tag>HEAD</tag>
+        <tag>maven-settings-decoder-1.0.2.OSS</tag>
     </scm>
 
     <properties>
@@ -228,8 +228,7 @@ Passphrase: passphrase
 # Do a commit here, so that we can later print "done" :-)
 %commit
 %echo done
-EOF gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms gpg \-\-allow-secret-key-import \-\-import ./maven_gpg_key.sec gpg \-\-import ./maven_gpg_key.pub # List public keys
-        gpg \-\-list-keys
+EOF gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms gpg \-\-allow-secret-key-import \-\-import ./maven_gpg_key.sec gpg \-\-import ./maven_gpg_key.pub # List public keys gpg \-\-list-keys
         # List private keys
         gpg \-\-list-secret-keys
 
