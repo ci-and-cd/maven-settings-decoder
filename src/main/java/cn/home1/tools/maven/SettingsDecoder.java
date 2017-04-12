@@ -14,6 +14,7 @@ import org.w3c.dom.Document;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -90,7 +91,7 @@ public class SettingsDecoder {
       this.plainTextMasterPassword = null;
     } else {
       final String encodedMasterPassword = encodedMasterPassword(securityFile);
-      this.plainTextMasterPassword = decodeMasterPassword(encodedMasterPassword);
+      this.plainTextMasterPassword = decodeMasterPassword(encodedMasterPassword, this.debug);
     }
     if (this.debug) {
       System.err.printf("masterPassword:%s%n", this.plainTextMasterPassword);
@@ -109,7 +110,7 @@ public class SettingsDecoder {
       System.err.printf("nodeText:%s%n", nodeText);
     }
 
-    final String plainText = decodeText(nodeText, this.plainTextMasterPassword);
+    final String plainText = decodeText(nodeText, this.plainTextMasterPassword, this.debug);
 
     return plainText;
   }
@@ -154,7 +155,11 @@ public class SettingsDecoder {
     return new SettingsXpp3Reader().read(new FileInputStream(file));
   }
 
-  private static String decodeText(final String encodedText, final String key) throws PlexusCipherException {
+  private static String decodeText( //
+      final String encodedText, //
+      final String key, //
+      final boolean debug //
+  ) throws PlexusCipherException {
     final String result;
     if (key != null) {
       final Boolean encoded = encodedText != null && encodedText.startsWith("{") && encodedText.endsWith("}");
@@ -163,6 +168,12 @@ public class SettingsDecoder {
         result = new DefaultPlexusCipher().decryptDecorated(encodedText, key);
       } else if (envVar) {
         final String envVarName = encodedText.substring(6, encodedText.length() - 1);
+        if (debug) {
+          final Map<String, String> env = System.getenv();
+          for (Map.Entry<String, String> entry : env.entrySet()) {
+            System.err.printf("env name: %s, value: *secret* %n", entry.getKey());
+          }
+        }
         result = System.getenv(envVarName);
       } else {
         result = encodedText;
@@ -173,10 +184,13 @@ public class SettingsDecoder {
     return result;
   }
 
-  static String decodeMasterPassword(final String encodedMasterPassword) throws PlexusCipherException {
+  static String decodeMasterPassword( //
+      final String encodedMasterPassword, //
+      final boolean debug //
+  ) throws PlexusCipherException {
     // key = org.sonatype.plexus.components.sec.dispatcher.DefaultSecDispatcher.SYSTEM_PROPERTY_SEC_LOCATION;
     final String key = "settings.security";
-    return decodeText(encodedMasterPassword, key);
+    return decodeText(encodedMasterPassword, key, debug);
   }
 
   private static String xmlNodeText(final File file, final String xpathExpression) throws Exception {

@@ -24,18 +24,20 @@ public class SettingsDecoderTest {
     final File targetFile = dumpClasspathResourceIntoTmpFile("/settings-security.xml");
     final String encodedMasterPassword = SettingsDecoder.encodedMasterPassword(targetFile);
     System.out.println(encodedMasterPassword);
-    System.out.println(SettingsDecoder.decodeMasterPassword(encodedMasterPassword));
+    System.out.println(SettingsDecoder.decodeMasterPassword(encodedMasterPassword, true));
   }
 
   @Test
   public void testEnvVar() throws Exception {
     final File settingsFile = dumpClasspathResourceIntoTmpFile("/settings.xml");
     final File settingsSecurityFile = dumpClasspathResourceIntoTmpFile("/settings-security.xml");
+    //final String expression = "//server[id='github']/password/text()";
+    final String expression = "//server[id='github-nexus-snapshots']/username/text()";
     final String plainText = new SettingsDecoder( //
         settingsFile.getCanonicalPath(), //
         settingsSecurityFile.getCanonicalPath(), //
         true //
-    ).getText("//server[id='github']/password/text()");
+    ).getText(expression);
     System.out.println(plainText);
     assertNotNull(plainText);
     assertFalse(plainText.equals(""));

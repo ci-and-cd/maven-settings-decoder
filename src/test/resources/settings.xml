@@ -32,6 +32,16 @@
             <password>${env.GITHUB_GIT_SERVICE_TOKEN}</password>
         </server>
         <server>
+            <id>github-nexus-releases</id>
+            <username>${env.MAVEN_CENTRAL_USER}</username>
+            <password>${env.MAVEN_CENTRAL_PASS}</password>
+        </server>
+        <server>
+            <id>github-nexus-snapshots</id>
+            <username>${env.MAVEN_CENTRAL_USER}</username>
+            <password>${env.MAVEN_CENTRAL_PASS}</password>
+        </server>
+        <server>
             <id>internal-nexus-releases</id>
             <username>deployment</username>
             <password>{RJzAlz+tw54HBhZ3IBzFCuNQY2Wyzqv2EonquIV7hdE=}</password>
@@ -71,6 +81,51 @@
             <properties>
                 <gpg.keyname>${build.gpg.keyname}</gpg.keyname>
             </properties>
+        </profile>
+        <profile>
+            <id>github-infrastructure</id>
+            <properties>
+                <sonar.host.url>https://sonarqube.com</sonar.host.url>
+            </properties>
+            <repositories>
+                <repository>
+                    <id>github-nexus-releases</id>
+                    <name>central releases</name>
+                    <url>https://oss.sonatype.org/content/repositories/releases/</url>
+                    <releases><enabled>true</enabled></releases>
+                    <snapshots><enabled>false</enabled></snapshots>
+                </repository>
+                <repository>
+                    <id>github-nexus-snapshots</id>
+                    <name>central snapshots</name>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                    <releases><enabled>false</enabled></releases>
+                    <snapshots><enabled>true</enabled></snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>github-nexus-releases</id>
+                    <name>central releases</name>
+                    <url>https://oss.sonatype.org/content/repositories/releases/</url>
+                    <releases><enabled>true</enabled></releases>
+                    <snapshots><enabled>false</enabled></snapshots>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>github-nexus-snapshots</id>
+                    <name>central snapshots</name>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                    <releases><enabled>false</enabled></releases>
+                    <snapshots><enabled>true</enabled></snapshots>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>github-nexus-thirdparty</id>
+                    <name>central thirdparty</name>
+                    <url>https://oss.sonatype.org/content/repositories/third-party-releases/</url>
+                    <releases><enabled>true</enabled></releases>
+                    <snapshots><enabled>false</enabled></snapshots>
+                </pluginRepository>
+            </pluginRepositories>
         </profile>
         <profile>
             <id>internal-infrastructure</id>
