@@ -306,6 +306,7 @@ EOF gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms gpg \-\-all
                         <configuration>
                             <!-- git commit message -->
                             <message>Maven artifacts for ${project.version}</message>
+                            <merge>true</merge>
                             <!-- disable webpage processing -->
                             <noJekyll>true</noJekyll>
                             <!-- matches distribution management repository url above -->
