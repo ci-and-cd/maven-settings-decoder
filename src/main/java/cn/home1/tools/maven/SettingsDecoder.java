@@ -164,11 +164,16 @@ public class SettingsDecoder {
     if (key != null) {
       final Boolean encoded = encodedText != null && encodedText.startsWith("{") && encodedText.endsWith("}");
       final Boolean envVar = encodedText != null && encodedText.startsWith("${env.") && encodedText.endsWith("}");
+      if (debug) {
+        System.err.printf("key not null%n");
+        System.err.printf("encoded: %s, envVar: %s %n", encoded, envVar);
+      }
       if (encoded) {
         result = new DefaultPlexusCipher().decryptDecorated(encodedText, key);
       } else if (envVar) {
         final String envVarName = encodedText.substring(6, encodedText.length() - 1);
         if (debug) {
+          System.err.printf("envVarName: %s%n", envVarName);
           final Map<String, String> env = System.getenv();
           for (Map.Entry<String, String> entry : env.entrySet()) {
             System.err.printf("env name: %s, value: *secret* %n", entry.getKey());
@@ -179,6 +184,9 @@ public class SettingsDecoder {
         result = encodedText;
       }
     } else {
+      if (debug) {
+        System.err.printf("key is null%n");
+      }
       result = encodedText;
     }
     return result;
