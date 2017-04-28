@@ -8,9 +8,9 @@
     <version>1.0.5.OSS-SNAPSHOT</version>
 
     <scm>
-        <connection>scm:git:https://github.com/chshawkn/maven-settings-decoder.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/chshawkn/maven-settings-decoder.git</developerConnection>
-        <url>https://github.com/chshawkn/maven-settings-decoder</url>
+        <connection>scm:git:https://github.com/home1-oss/maven-settings-decoder.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/home1-oss/maven-settings-decoder.git</developerConnection>
+        <url>https://github.com/home1-oss/maven-settings-decoder</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -169,6 +169,53 @@
     </dependencies>
 
     <profiles>
+        <profile>
+            <id>release-and-publish-to-ossrh</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>github-nexus-releases</id>
+                    <name>OSSRH staging</name>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+                </repository>
+                <snapshotRepository>
+                    <id>github-nexus-snapshots</id>
+                    <name>OSSRH snapshots</name>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>github-nexus-snapshots</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <!--
         <![CDATA[
         Usage:
@@ -218,9 +265,9 @@ cat >maven_gpg_key_with_default_algorithms <<EOF
 %echo Generating a default key
 Key-Type: default
 Subkey-Type: default
-Name-Real: chshawkn
+Name-Real: home1.cn
 Name-Comment: with passphrase
-Name-Email: chshawkn@somedomain.com
+Name-Email: opensource@home1.cn
 Expire-Date: 0
 Passphrase: passphrase
 %pubring maven_gpg_key.pub
@@ -250,7 +297,7 @@ EOF gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms gpg \-\-all
         <profile>
             <id>release-and-publish-to-github</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
                 <!-- github server corresponds to entry in ~/.m2/settings.xml -->
@@ -312,7 +359,7 @@ EOF gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms gpg \-\-all
                             <!-- github repo name -->
                             <repositoryName>${project.artifactId}</repositoryName>
                             <!-- github username  -->
-                            <repositoryOwner>chshawkn</repositoryOwner>
+                            <repositoryOwner>home1-oss</repositoryOwner>
                         </configuration>
                         <executions>
                             <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
