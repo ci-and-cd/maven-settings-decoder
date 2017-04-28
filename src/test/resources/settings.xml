@@ -25,7 +25,7 @@
     <servers>
         <server>
             <id>gpg.passphrase</id>
-            <passphrase>${build.gpg.passphrase}</passphrase>
+            <passphrase>${env.GPG_PASSPHRASE}</passphrase>
         </server>
         <server>
             <id>github</id>
@@ -79,7 +79,9 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <gpg.keyname>${build.gpg.keyname}</gpg.keyname>
+                <gpg.executable>gpg</gpg.executable>
+                <gpg.keyname>${env.GPG_KEYNAME}</gpg.keyname>
+                <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
             </properties>
         </profile>
         <profile>
