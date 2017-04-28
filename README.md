@@ -40,7 +40,7 @@ Use as gradle buildscript dependency, so we can access maven's settings.xml from
           }
           dependencies {
             ...
-            classpath 'cn.home1.tools:maven-settings-decoder:1.0.5.OSS'
+            classpath 'cn.home1.tools:maven-settings-decoder:1.0.6.OSS-SNAPSHOT'
           }
         }
         ...
