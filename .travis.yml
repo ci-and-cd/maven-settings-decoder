@@ -44,3 +44,16 @@ script:
 services:
 - docker
 sudo: required
+
+# v is refered to gitflow-maven-plugin:versionTagPrefix
+before_deploy:
+  - export PROJECT_MAVEN_VERSION=${TRAVIS_TAG/v/}
+deploy:
+  provider: releases
+  api_key: $GITHUB_GIT_SERVICE_TOKEN
+  file: "target/maven-settings-decoder-${PROJECT_MAVEN_VERSION}-exec.jar"
+  skip_cleanup: true
+  on:
+    tags: true
+after_deploy:
+  - echo "deploy finished!"
