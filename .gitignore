@@ -15,6 +15,7 @@ bower_components
 git.properties
 node_modules
 target/
+codesigning.asc
 
 **/src/main/docker/Dockerfile
 **/src/site/markdown/README.md
