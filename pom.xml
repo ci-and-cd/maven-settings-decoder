@@ -2,10 +2,38 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cn.home1.tools</groupId>
     <artifactId>maven-settings-decoder</artifactId>
+    <description>maven settings.xml decoder for gradle</description>
+    <groupId>cn.home1.tools</groupId>
+    <name>maven-settings-decoder</name>
     <packaging>jar</packaging>
+    <url>https://github.com/home1-oss/maven-settings-decoder</url>
     <version>1.0.5.OSS-SNAPSHOT</version>
+
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/home1-oss/maven-settings-decoder</url>
+    </ciManagement>
+
+    <developers>
+        <developer>
+            <name>Haolun Zhang</name>
+            <url>https://github.com/chshawkn</url>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/home1-oss/maven-settings-decoder/issues</url>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <scm>
         <connection>scm:git:https://github.com/home1-oss/maven-settings-decoder.git</connection>
