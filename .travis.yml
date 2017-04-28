@@ -51,7 +51,7 @@ before_deploy:
 deploy:
   provider: releases
   api_key: $GITHUB_GIT_SERVICE_TOKEN
-  file: "target/maven-settings-decoder-${PROJECT_MAVEN_VERSION}.jar"
+  file: "target/maven-settings-decoder-${PROJECT_MAVEN_VERSION}-exec.jar"
   skip_cleanup: true
   on:
     tags: true
