@@ -32,7 +32,7 @@ public class SettingsDecoderTest {
     final File settingsFile = dumpClasspathResourceIntoTmpFile("/settings.xml");
     final File settingsSecurityFile = dumpClasspathResourceIntoTmpFile("/settings-security.xml");
     //final String expression = "//server[id='github']/password/text()";
-    final String expression = "//server[id='github-nexus-snapshots']/username/text()";
+    final String expression = "//server[id='OSSRH-snapshots']/username/text()";
     final String plainText = new SettingsDecoder( //
         settingsFile.getCanonicalPath(), //
         settingsSecurityFile.getCanonicalPath(), //

@@ -4,27 +4,35 @@
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
                         http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
+
+
     <localRepository>${user.home}/.m2/repository</localRepository>
     <interactiveMode/>
     <usePluginRegistry/>
     <offline/>
 
     <proxies>
+        <!--proxy>
+            <id>http-proxy</id>
+            <active>true</active>
+            <protocol>http</protocol>
+            <host>127.0.0.1</host>
+            <port>8080</port>
+        </proxy-->
     </proxies>
 
     <mirrors>
-        <!-- mirrorOf: pom.xml repositories repository id -->
         <!--mirror>
-            <id>local-nexus-mirror</id>
-            <name>local nexus mirror</name>
-            <url>${nexus.local.mirror}</url>
+            <id>local-nexus3-mirror</id>
+            <name>local nexus3 mirror</name>
+            <url>${local-nexus3.repository}/maven-public/</url>
             <!-mirrorOf>central,spring-libs-release,spring-milestone,spring-libs-snapshot,conjars.org,clojars.org,org.jboss.repository,codehaus-mule-repo,repo.jenkins-ci.org</mirrorOf->
             <mirrorOf>external:*,!github-chshawkn-wagon-maven-plugin</mirrorOf>
         </mirror-->
         <!--mirror>
-            <id>internal-nexus-mirror</id>
-            <name>internal nexus mirror</name>
-            <url>${internal-nexus.mirror}</url>
+            <id>internal-nexus3-mirror</id>
+            <name>internal nexus3 mirror</name>
+            <url>${internal-nexus3.repository}/maven-public/</url>
             <mirrorOf>external:*,!github-chshawkn-wagon-maven-plugin</mirrorOf>
         </mirror-->
     </mirrors>
@@ -36,15 +44,15 @@
         </server>
         <server>
             <id>github</id>
-            <password>${env.GITHUB_GIT_SERVICE_TOKEN}</password>
+            <password>${env.GITHUB_INFRASTRUCTURE_CONF_GIT_TOKEN}</password>
         </server>
         <server>
-            <id>github-nexus-releases</id>
+            <id>OSSRH-releases</id>
             <username>${env.MAVEN_CENTRAL_USER}</username>
             <password>${env.MAVEN_CENTRAL_PASS}</password>
         </server>
         <server>
-            <id>github-nexus-snapshots</id>
+            <id>OSSRH-snapshots</id>
             <username>${env.MAVEN_CENTRAL_USER}</username>
             <password>${env.MAVEN_CENTRAL_PASS}</password>
         </server>
@@ -61,19 +69,19 @@
         <!-- accept RSA key fingerprint -->
         <!-- ssh -o UserKnownHostsFile=~/.ssh/known_hosts root@local-mvnsite -p 10022 -->
         <server>
-            <id>local-nexus-releases</id>
+            <id>local-nexus3-releases</id>
             <username>deployment</username>
-            <password>{sFbawUupe+EHrqH9uvIFHnFGCfn+/lMFxFFmAwtj8ZQ=}</password>
+            <password>deployment</password>
         </server>
         <server>
-            <id>local-nexus-snapshots</id>
+            <id>local-nexus3-snapshots</id>
             <username>deployment</username>
-            <password>{sFbawUupe+EHrqH9uvIFHnFGCfn+/lMFxFFmAwtj8ZQ=}</password>
+            <password>deployment</password>
         </server>
         <server>
-            <id>local-nexus-thirdparty</id>
+            <id>local-nexus3-thirdparty</id>
             <username>deployment</username>
-            <password>{sFbawUupe+EHrqH9uvIFHnFGCfn+/lMFxFFmAwtj8ZQ=}</password>
+            <password>deployment</password>
         </server>
         <server>
             <id>local-mvnsite</id>
@@ -82,7 +90,7 @@
             <!--username>root</username>
             <privateKey>${user.home}/.ssh/local-mvnsite</privateKey-->
             <username>deployment</username>
-            <password>{sFbawUupe+EHrqH9uvIFHnFGCfn+/lMFxFFmAwtj8ZQ=}</password>
+            <password>deployment</password>
             <configuration>
                 <!-- see: https://maven.apache.org/wagon/apidocs/index.html -->
                 <!-- java.lang.ClassNotFoundException: org.apache.maven.wagon.providers.ssh.knownhost.NullKnownHostProvider -->
@@ -92,17 +100,17 @@
             </configuration>
         </server>
         <server>
-            <id>internal-nexus-releases</id>
+            <id>internal-nexus3-releases</id>
             <username>deployment</username>
             <password>{RJzAlz+tw54HBhZ3IBzFCuNQY2Wyzqv2EonquIV7hdE=}</password>
         </server>
         <server>
-            <id>internal-nexus-snapshots</id>
+            <id>internal-nexus3-snapshots</id>
             <username>deployment</username>
             <password>{RJzAlz+tw54HBhZ3IBzFCuNQY2Wyzqv2EonquIV7hdE=}</password>
         </server>
         <server>
-            <id>internal-nexus-thirdparty</id>
+            <id>internal-nexus3-thirdparty</id>
             <username>deployment</username>
             <password>{RJzAlz+tw54HBhZ3IBzFCuNQY2Wyzqv2EonquIV7hdE=}</password>
         </server>
@@ -143,7 +151,7 @@
             </properties>
         </profile>
         <profile>
-            <id>github-infrastructure</id>
+            <id>infrastructure-github</id>
             <properties>
                 <sonar.host.url>https://sonarqube.com</sonar.host.url>
             </properties>
@@ -158,14 +166,14 @@
                     </snapshots>
                 </repository>
                 <repository>
-                    <id>github-nexus-releases</id>
+                    <id>OSSRH-releases</id>
                     <name>central releases</name>
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>false</enabled></snapshots>
                 </repository>
                 <repository>
-                    <id>github-nexus-snapshots</id>
+                    <id>OSSRH-snapshots</id>
                     <name>central snapshots</name>
                     <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
                     <releases><enabled>false</enabled></releases>
@@ -186,21 +194,21 @@
                     </releases>
                 </pluginRepository>
                 <pluginRepository>
-                    <id>github-nexus-releases</id>
+                    <id>OSSRH-releases</id>
                     <name>central releases</name>
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>false</enabled></snapshots>
                 </pluginRepository>
                 <pluginRepository>
-                    <id>github-nexus-snapshots</id>
+                    <id>OSSRH-snapshots</id>
                     <name>central snapshots</name>
                     <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
                     <releases><enabled>false</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </pluginRepository>
                 <pluginRepository>
-                    <id>github-nexus-thirdparty</id>
+                    <id>OSSRH-thirdparty</id>
                     <name>central thirdparty</name>
                     <url>https://oss.sonatype.org/content/repositories/third-party-releases/</url>
                     <releases><enabled>true</enabled></releases>
@@ -209,106 +217,106 @@
             </pluginRepositories>
         </profile>
         <profile>
-            <id>local-infrastructure</id>
+            <id>infrastructure-local</id>
             <properties>
                 <sonar.host.url>${local-sonar.host.url}</sonar.host.url>
-                <!--sonar.jdbc.url>jdbc:h2:tcp://local-sonarqube/sonar</sonar.jdbc.url>
-                <sonar.jdbc.url>jdbc:postgresql://local-postgresql:5432/sonar</sonar.jdbc.url-->
+                <!--sonar.jdbc.url>jdbc:h2:tcp://sonarqube.local/sonar</sonar.jdbc.url>
+                <sonar.jdbc.url>jdbc:postgresql://postgresql.local:5432/sonar</sonar.jdbc.url-->
             </properties>
             <repositories>
                 <repository>
-                    <id>local-nexus-releases</id>
-                    <name>local nexus releases</name>
-                    <url>${nexus.local.repositories}/maven-releases/</url>
+                    <id>local-nexus3-releases</id>
+                    <name>local nexus3 releases</name>
+                    <url>${local-nexus3.repository}/maven-releases/</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>false</enabled></snapshots>
                 </repository>
                 <repository>
-                    <id>local-nexus-snapshots</id>
-                    <name>local nexus snapshots</name>
-                    <url>${nexus.local.repositories}/maven-snapshots/</url>
+                    <id>local-nexus3-snapshots</id>
+                    <name>local nexus3 snapshots</name>
+                    <url>${local-nexus3.repository}/maven-snapshots/</url>
                     <releases><enabled>false</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </repository>
                 <repository>
-                    <id>local-nexus-thirdparty</id>
-                    <name>local nexus thirdparty</name>
-                    <url>${nexus.local.repositories}/maven-thirdparty/</url>
+                    <id>local-nexus3-thirdparty</id>
+                    <name>local nexus3 thirdparty</name>
+                    <url>${local-nexus3.repository}/maven-thirdparty/</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </repository>
             </repositories>
             <pluginRepositories>
                 <pluginRepository>
-                    <id>local-nexus-releases</id>
-                    <name>local nexus releases</name>
-                    <url>${nexus.local.repositories}/maven-releases/</url>
+                    <id>local-nexus3-releases</id>
+                    <name>local nexus3 releases</name>
+                    <url>${local-nexus3.repository}/maven-releases/</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>false</enabled></snapshots>
                 </pluginRepository>
                 <pluginRepository>
-                    <id>local-nexus-snapshots</id>
-                    <name>local nexus snapshots</name>
-                    <url>${nexus.local.repositories}/maven-snapshots/</url>
+                    <id>local-nexus3-snapshots</id>
+                    <name>local nexus3 snapshots</name>
+                    <url>${local-nexus3.repository}/maven-snapshots/</url>
                     <releases><enabled>false</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </pluginRepository>
                 <pluginRepository>
-                    <id>local-nexus-thirdparty</id>
-                    <name>local nexus thirdparty</name>
-                    <url>${nexus.local.repositories}/maven-thirdparty/</url>
+                    <id>local-nexus3-thirdparty</id>
+                    <name>local nexus3 thirdparty</name>
+                    <url>${local-nexus3.repository}/maven-thirdparty/</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </pluginRepository>
             </pluginRepositories>
         </profile>
         <profile>
-            <id>internal-infrastructure</id>
+            <id>infrastructure-internal</id>
             <properties>
                 <sonar.host.url>${internal-sonar.host.url}</sonar.host.url>
             </properties>
             <repositories>
                 <repository>
-                    <id>internal-nexus-releases</id>
-                    <name>internal nexus releases</name>
-                    <url>${internal-nexus.repositories}/releases/</url>
+                    <id>internal-nexus3-releases</id>
+                    <name>internal nexus3 releases</name>
+                    <url>${internal-nexus3.repository}/maven-releases/</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>false</enabled></snapshots>
                 </repository>
                 <repository>
-                    <id>internal-nexus-snapshots</id>
-                    <name>internal nexus snapshots</name>
-                    <url>${internal-nexus.repositories}/snapshots/</url>
+                    <id>internal-nexus3-snapshots</id>
+                    <name>internal nexus3 snapshots</name>
+                    <url>${internal-nexus3.repository}/maven-snapshots/</url>
                     <releases><enabled>false</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </repository>
                 <repository>
-                    <id>internal-nexus-thirdparty</id>
-                    <name>internal nexus thirdparty</name>
-                    <url>${internal-nexus.repositories}/thirdparty/</url>
+                    <id>internal-nexus3-thirdparty</id>
+                    <name>internal nexus3 thirdparty</name>
+                    <url>${internal-nexus3.repository}/maven-thirdparty/</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </repository>
             </repositories>
             <pluginRepositories>
                 <pluginRepository>
-                    <id>internal-nexus-releases</id>
-                    <name>internal nexus releases</name>
-                    <url>${internal-nexus.repositories}/releases/</url>
+                    <id>internal-nexus3-releases</id>
+                    <name>internal nexus3 releases</name>
+                    <url>${internal-nexus3.repository}/maven-releases/</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>false</enabled></snapshots>
                 </pluginRepository>
                 <pluginRepository>
-                    <id>internal-nexus-snapshots</id>
-                    <name>internal nexus snapshots</name>
-                    <url>${internal-nexus.repositories}/snapshots/</url>
+                    <id>internal-nexus3-snapshots</id>
+                    <name>internal nexus3 snapshots</name>
+                    <url>${internal-nexus3.repository}/maven-snapshots/</url>
                     <releases><enabled>false</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </pluginRepository>
                 <pluginRepository>
-                    <id>internal-nexus-thirdparty</id>
-                    <name>internal nexus thirdparty</name>
-                    <url>${internal-nexus.repositories}/thirdparty/</url>
+                    <id>internal-nexus3-thirdparty</id>
+                    <name>internal nexus3 thirdparty</name>
+                    <url>${internal-nexus3.repository}/maven-thirdparty/</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </pluginRepository>
