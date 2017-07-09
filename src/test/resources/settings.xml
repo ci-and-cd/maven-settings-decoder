@@ -4,8 +4,6 @@
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
                         http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
-
-
     <localRepository>${user.home}/.m2/repository</localRepository>
     <interactiveMode/>
     <usePluginRegistry/>
@@ -22,6 +20,8 @@
     </proxies>
 
     <mirrors>
+        <!-- Do not use variable substitution in mirrors when using an IDE, it does not works. -->
+        <!-- mirrorOf: pom.xml repositories repository id -->
         <!--mirror>
             <id>local-nexus3-mirror</id>
             <name>local nexus3 mirror</name>
@@ -130,7 +130,7 @@
     </servers>
 
     <activeProfiles>
-        <activeProfile>${infrastructure}-infrastructure</activeProfile>
+        <activeProfile>infrastructure-${infrastructure}</activeProfile>
     </activeProfiles>
 
     <pluginGroups>
@@ -148,6 +148,28 @@
                 <gpg.executable>gpg</gpg.executable>
                 <gpg.keyname>${env.GPG_KEYNAME}</gpg.keyname>
                 <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
+            </properties>
+        </profile>
+        <profile>
+            <id>default-internal-sonar-host-url</id>
+            <activation>
+                <property>
+                    <name>!internal-sonar.host.url</name>
+                </property>
+            </activation>
+            <properties>
+                <internal-sonar.host.url>http://sonarqube.internal:9000</internal-sonar.host.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>default-local-sonar-host-url</id>
+            <activation>
+                <property>
+                    <name>!local-sonar.host.url</name>
+                </property>
+            </activation>
+            <properties>
+                <local-sonar.host.url>http://sonarqube.local:9000</local-sonar.host.url>
             </properties>
         </profile>
         <profile>

@@ -39,7 +39,7 @@ public class SettingsDecoderTest {
         true //
     ).getText(expression);
     System.out.println(plainText);
-    assertNotNull(plainText);
+    assertNotNull("ensure ${env.MAVEN_CENTRAL_USER} and ${env.MAVEN_CENTRAL_PASS} is set.", plainText);
     assertFalse(plainText.equals(""));
     assertFalse(plainText.startsWith("${env.") && plainText.endsWith("}"));
   }
