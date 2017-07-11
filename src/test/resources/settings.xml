@@ -118,7 +118,7 @@
             <id>internal-mvnsite</id>
             <username>root</username>
             <!--passphrase>if required</passphrase-->
-            <privateKey>${user.home}/.ssh/internal-mvnsite</privateKey>
+            <privateKey>${user.home}/.ssh/mvnsite.internal</privateKey>
             <configuration>
                 <!-- see: https://maven.apache.org/wagon/apidocs/index.html -->
                 <!-- java.lang.ClassNotFoundException: org.apache.maven.wagon.providers.ssh.knownhost.NullKnownHostProvider -->
