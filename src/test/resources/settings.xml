@@ -67,7 +67,7 @@
         <!-- see: http://maven.apache.org/guides/mini/guide-encryption.html -->
         <!-- mvn &#x002d;&#x002d;encrypt-password ${password} -->
         <!-- accept RSA key fingerprint -->
-        <!-- ssh -o UserKnownHostsFile=~/.ssh/known_hosts root@local-mvnsite -p 10022 -->
+        <!-- ssh -o UserKnownHostsFile=~/.ssh/known_hosts root@mvnsite.local -p 10022 -->
         <server>
             <id>local-nexus3-releases</id>
             <username>deployment</username>
@@ -88,7 +88,7 @@
             <!--username>root</username>
             <password>root</password-->
             <!--username>root</username>
-            <privateKey>${user.home}/.ssh/local-mvnsite</privateKey-->
+            <privateKey>${user.home}/.ssh/mvnsite.local</privateKey-->
             <username>deployment</username>
             <password>deployment</password>
             <configuration>
