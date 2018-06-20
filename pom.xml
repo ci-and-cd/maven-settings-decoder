@@ -7,12 +7,12 @@
     <groupId>cn.home1.tools</groupId>
     <name>maven-settings-decoder</name>
     <packaging>jar</packaging>
-    <url>https://github.com/home1-oss/maven-settings-decoder</url>
+    <url>https://github.com/ci-and-cd/maven-settings-decoder</url>
     <version>1.0.6.OSS-SNAPSHOT</version>
 
     <ciManagement>
         <system>Travis CI</system>
-        <url>https://travis-ci.org/home1-oss/maven-settings-decoder</url>
+        <url>https://travis-ci.org/ci-and-cd/maven-settings-decoder</url>
     </ciManagement>
 
     <developers>
@@ -24,7 +24,7 @@
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/home1-oss/maven-settings-decoder/issues</url>
+        <url>https://github.com/ci-and-cd/maven-settings-decoder/issues</url>
     </issueManagement>
 
     <licenses>
@@ -36,9 +36,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:https://github.com/home1-oss/maven-settings-decoder.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/home1-oss/maven-settings-decoder.git</developerConnection>
-        <url>https://github.com/home1-oss/maven-settings-decoder</url>
+        <connection>scm:git:https://github.com/ci-and-cd/maven-settings-decoder.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/ci-and-cd/maven-settings-decoder.git</developerConnection>
+        <url>https://github.com/ci-and-cd/maven-settings-decoder</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -215,15 +215,6 @@
                     <name>OSSRH snapshots</name>
                     <url>https://oss.sonatype.org/content/repositories/snapshots</url>
                 </snapshotRepository>
-                <!-- Do mvn site site:stage -DstagingDirectory=/tmp/path first,
-                then manually add/push to the gh-pages branch on GitHub -->
-                <site>
-                    <id>github-site</id>
-                    <name>Deployment through GitHub's site deployment plugin</name>
-                    <!--If sub projects/module inherit the site URL from a parent POM,they will automatically append their <artifactId>
-                    to their effective deployment location. More info in http://maven.apache.org/guides/mini/guide-site.html-->
-                    <url>snapshot</url>
-                </site>
             </distributionManagement>
             <build>
                 <plugins>
@@ -441,7 +432,7 @@ EOF gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms gpg \-\-all
                             <!-- github repo name -->
                             <repositoryName>${project.artifactId}</repositoryName>
                             <!-- github username  -->
-                            <repositoryOwner>home1-oss</repositoryOwner>
+                            <repositoryOwner>ci-and-cd</repositoryOwner>
                         </configuration>
                         <executions>
                             <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
