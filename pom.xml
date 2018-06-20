@@ -215,6 +215,15 @@
                     <name>OSSRH snapshots</name>
                     <url>https://oss.sonatype.org/content/repositories/snapshots</url>
                 </snapshotRepository>
+                <!-- Do mvn site site:stage -DstagingDirectory=/tmp/path first,
+                then manually add/push to the gh-pages branch on GitHub -->
+                <site>
+                    <id>github-site</id>
+                    <name>Deployment through GitHub's site deployment plugin</name>
+                    <!--If sub projects/module inherit the site URL from a parent POM,they will automatically append their <artifactId>
+                    to their effective deployment location. More info in http://maven.apache.org/guides/mini/guide-site.html-->
+                    <url>snapshot</url>
+                </site>
             </distributionManagement>
             <build>
                 <plugins>
