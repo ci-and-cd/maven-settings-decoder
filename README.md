@@ -34,10 +34,8 @@ Use as a command-line tool:
 Use as gradle buildscript dependency, so we can access maven's settings.xml from our build script:
 
         buildscript {
-          repositories {
-            ...
-            maven { url 'https://raw.github.com/chshawkn/maven-settings-decoder/mvn-repo/' }
-          }
+          // cn.home1.tools:maven-settings-decoder is in maven central.
+          mavenCentral()
           dependencies {
             ...
             classpath 'cn.home1.tools:maven-settings-decoder:1.0.6.OSS-SNAPSHOT'
@@ -50,17 +48,3 @@ Use as gradle buildscript dependency, so we can access maven's settings.xml from
         println "${nexus}-snapshots username: " + mavenSettings.getText("//server[id='${nexus}-snapshots']/username/text()")
         println "${nexus}-snapshots password: " + mavenSettings.getText("//server[id='${nexus}-snapshots']/password/text()")
         ...
-        
-
-Use as maven dependency:
-
-        <repositories>
-            <repository>
-                <id>maven-settings-decoder-mvn-repo</id>
-                <url>https://raw.github.com/chshawkn/maven-settings-decoder/mvn-repo/</url>
-                <snapshots>
-                    <enabled>true</enabled>
-                    <updatePolicy>always</updatePolicy>
-                </snapshots>
-            </repository>
-        </repositories>

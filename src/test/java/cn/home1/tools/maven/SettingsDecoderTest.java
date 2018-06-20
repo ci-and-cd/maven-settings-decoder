@@ -1,6 +1,7 @@
 package cn.home1.tools.maven;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -39,8 +40,8 @@ public class SettingsDecoderTest {
         true //
     ).getText(expression);
     System.out.println(plainText);
-    assertNotNull("ensure ${env.MAVEN_CENTRAL_USER} and ${env.MAVEN_CENTRAL_PASS} is set.", plainText);
-    assertFalse(plainText.equals(""));
+    assertNotNull("ensure ${env.CI_OPT_MAVEN_CENTRAL_USER} and ${env.CI_OPT_MAVEN_CENTRAL_PASS} is set.", plainText);
+    assertNotEquals("", plainText);
     assertFalse(plainText.startsWith("${env.") && plainText.endsWith("}"));
   }
 

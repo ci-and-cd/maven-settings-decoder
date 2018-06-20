@@ -1,24 +1,26 @@
 #!/usr/bin/env bash
 
-if [ -f codesigning.asc.enc ] && [ "${TRAVIS_PULL_REQUEST}" == 'false' ]; then
-    openssl aes-256-cbc -K $encrypted_6107258e0e2a_key -iv $encrypted_6107258e0e2a_iv -in codesigning.asc.enc -out codesigning.asc -d
-    gpg --fast-import codesigning.asc
-fi
 
-if [ -z "${CI_BUILD_REF_NAME}" ] && [ -n "${TRAVIS_BRANCH}" ]; then CI_BUILD_REF_NAME="${TRAVIS_BRANCH}"; fi
+#echo -e "\n>>>>>>>>>> ---------- options in travis-ci's .travis.yml, this is for local test or debug ---------- >>>>>>>>>>"
+##export CI_OPT_CI_SCRIPT="https://github.com/ci-and-cd/maven-build/raw/master/src/main/ci-script/lib_ci.sh"
+##export CI_OPT_INFRASTRUCTURE="opensource"
+#echo -e "<<<<<<<<<< ---------- options in travis-ci's .travis.yml, this is for local test or debug ---------- <<<<<<<<<<\n"
 
-if [ -n "${TRAVIS_EVENT_TYPE}" ] && [ "${TRAVIS_EVENT_TYPE}" != "pull_request" ]; then
-    case "$CI_BUILD_REF_NAME" in
-        "develop")
-            mvn -Dsettings.security=src/test/resources/security-settings.xml -s src/test/resources/settings.xml clean package deploy
-            ;;
-        release*)
-            mvn -Dsettings.security=src/test/resources/security-settings.xml -s src/test/resources/settings.xml clean package deploy
-            ;;
-        feature*|hotfix*|"master"|*)
-            mvn -Dsettings.security=src/test/resources/security-settings.xml -s src/test/resources/settings.xml clean package
-            ;;
-    esac
-else
-    mvn -Dsettings.security=src/test/resources/security-settings.xml -s src/test/resources/settings.xml clean package
-fi
+
+echo -e "\n>>>>>>>>>> ---------- custom, override options ---------- >>>>>>>>>>"
+if [ -z "${CI_OPT_CI_SCRIPT}" ]; then CI_OPT_CI_SCRIPT="https://github.com/ci-and-cd/maven-build/raw/master/src/main/ci-script/lib_ci.sh"; fi
+if [ -z "${CI_OPT_GITHUB_SITE_REPO_OWNER}" ]; then CI_OPT_GITHUB_SITE_REPO_OWNER="home1-oss"; fi
+if [ -z "${CI_OPT_GPG_KEYNAME}" ]; then CI_OPT_GPG_KEYNAME="59DBF10E"; fi
+if [ -z "${CI_OPT_MAVEN_BUILD_REPO}" ]; then CI_OPT_MAVEN_BUILD_REPO="https://github.com/ci-and-cd/maven-build/raw/master"; fi
+if [ -z "${CI_OPT_ORIGIN_REPO_SLUG}" ]; then CI_OPT_ORIGIN_REPO_SLUG="ci-and-cd/maven-settings-decoder"; fi
+if [ -z "${CI_OPT_SITE}" ]; then CI_OPT_SITE="true"; fi
+if [ -z "${CI_OPT_SITE_PATH_PREFIX}" ]; then CI_OPT_SITE_PATH_PREFIX="ci-and-cd"; fi
+if [ -z "${CI_OPT_SONAR_ORGANIZATION}" ]; then CI_OPT_SONAR_ORGANIZATION="home1-oss-github"; fi
+if [ -z "${CI_OPT_SONAR}" ]; then CI_OPT_SONAR="true"; fi
+echo -e "<<<<<<<<<< ---------- custom, override options ---------- <<<<<<<<<<\n"
+
+
+echo -e "\n>>>>>>>>>> ---------- call remote script ---------- >>>>>>>>>>"
+echo "curl -s -L ${CI_OPT_CI_SCRIPT} > /tmp/$(basename $(pwd))-lib_ci.sh && source /tmp/$(basename $(pwd))-lib_ci.sh"
+curl -s -L ${CI_OPT_CI_SCRIPT} > /tmp/$(basename $(pwd))-lib_ci.sh && source /tmp/$(basename $(pwd))-lib_ci.sh
+echo -e "<<<<<<<<<< ---------- call remote script ---------- <<<<<<<<<<\n"

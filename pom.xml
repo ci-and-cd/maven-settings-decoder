@@ -204,7 +204,7 @@
             </activation>
             <distributionManagement>
                 <repository>
-                    <id>OSSRH-releases</id>
+                    <id>OSSRH-staging</id>
                     <name>OSSRH staging</name>
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
                 </repository>

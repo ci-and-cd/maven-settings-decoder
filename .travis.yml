@@ -1,22 +1,24 @@
+
 addons:
   apt:
     packages:
-    - gnupg
+    - aria2
+    #- gnupg
     - gnupg2
     - graphviz
     - openssl
 before_install:
-- wget https://archive.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.zip && unzip -qq apache-maven-3.5.0-bin.zip
-- export M2_HOME=$PWD/apache-maven-3.5.0
+- aria2c --file-allocation=none -c -x 10 -s 10 -m 0 --console-log-level=notice --log-level=notice --summary-interval=0 -o apache-maven-3.5.3-bin.zip https://archive.apache.org/dist/maven/maven-3/3.5.3/binaries/apache-maven-3.5.3-bin.zip && unzip -qq apache-maven-3.5.3-bin.zip
+- export M2_HOME=$PWD/apache-maven-3.5.3
 - export PATH=$M2_HOME/bin:$PATH
 branches:
   only:
-  - master
-  - develop
-  - /^feature\/.*$/
-  - /^hotfix\/.*$/
-  - /^release\/.*$/
-  - /^v\d+\.\d+(\.\d+)?(-\S*)?/
+  #- master # do nothing on master branch
+  - develop # snapshots on develop branch
+  - /^feature\/.*$/ # build and test on feature branches
+  - /^hotfix\/.*$/ # release on hotfix branches
+  - /^release\/.*$/ # release on release branches
+  #- /^v\d+\.\d+(\.\d+)?(-\S*)?/ # build and publish a github release (can skip tests here) or do nothing on version tags
 cache:
   directories:
   - "$HOME/.cache"
@@ -27,31 +29,22 @@ cache:
 dist: trusty
 env:
   global:
-
-  - INFRASTRUCTURE=github
-
-
+  # i.e. CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/master/src/main/ci-script/lib_ci.sh
+  - CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/master/src/main/ci-script/lib_ci.sh
+  - CI_OPT_INFRASTRUCTURE=opensource
   - MAVEN_SKIP_RC=true
 group: edge
 install: true
 jdk:
 - oraclejdk8
+#- oraclejdk9
 language: java
 script:
-- bash ci.sh
+# When prefixed with `travis_wait 30`, no log output until it is done.
+# see: https://github.com/travis-ci/travis-ci/issues/4190 or https://github.com/HaxeFoundation/hxcpp/issues/709
+- while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
+- bash ci.sh mvn clean install sonar:sonar site deploy site-deploy
+- kill %1
 services:
 - docker
 sudo: required
-
-# v is refered to gitflow-maven-plugin:versionTagPrefix
-before_deploy:
-  - export PROJECT_MAVEN_VERSION=${TRAVIS_TAG/v/}
-deploy:
-  provider: releases
-  api_key: $GITHUB_INFRASTRUCTURE_CONF_GIT_TOKEN
-  file: "target/maven-settings-decoder-${PROJECT_MAVEN_VERSION}-exec.jar"
-  skip_cleanup: true
-  on:
-    tags: true
-after_deploy:
-  - echo "deploy finished!"
