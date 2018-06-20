@@ -36,6 +36,8 @@ Use as gradle buildscript dependency, so we can access maven's settings.xml from
         buildscript {
           // cn.home1.tools:maven-settings-decoder is in maven central.
           mavenCentral()
+          // use sonatype-snapshots to get cn.home1.tools:maven-settings-decoder snapshot versions
+          //maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
           dependencies {
             ...
             classpath 'cn.home1.tools:maven-settings-decoder:1.0.6.OSS-SNAPSHOT'
