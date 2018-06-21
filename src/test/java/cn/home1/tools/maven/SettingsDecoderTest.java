@@ -1,6 +1,7 @@
 package cn.home1.tools.maven;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -32,15 +33,15 @@ public class SettingsDecoderTest {
     final File settingsFile = dumpClasspathResourceIntoTmpFile("/settings.xml");
     final File settingsSecurityFile = dumpClasspathResourceIntoTmpFile("/settings-security.xml");
     //final String expression = "//server[id='github']/password/text()";
-    final String expression = "//server[id='github-nexus-snapshots']/username/text()";
+    final String expression = "//server[id='OSSRH-snapshots']/username/text()";
     final String plainText = new SettingsDecoder( //
         settingsFile.getCanonicalPath(), //
         settingsSecurityFile.getCanonicalPath(), //
         true //
     ).getText(expression);
     System.out.println(plainText);
-    assertNotNull(plainText);
-    assertFalse(plainText.equals(""));
+    assertNotNull("ensure ${env.CI_OPT_MAVEN_CENTRAL_USER} and ${env.CI_OPT_MAVEN_CENTRAL_PASS} is set.", plainText);
+    assertNotEquals("", plainText);
     assertFalse(plainText.startsWith("${env.") && plainText.endsWith("}"));
   }
 

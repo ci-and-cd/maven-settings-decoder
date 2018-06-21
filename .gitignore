@@ -10,6 +10,7 @@
 .settings/
 .springBeans
 .tmp
+*.bak
 bin/
 bower_components
 git.properties
