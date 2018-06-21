@@ -8,7 +8,7 @@
     <name>maven-settings-decoder</name>
     <packaging>jar</packaging>
     <url>https://github.com/ci-and-cd/maven-settings-decoder</url>
-    <version>1.0.6.OSS-SNAPSHOT</version>
+    <version>1.0.6.OSS</version>
 
     <ciManagement>
         <system>Travis CI</system>
