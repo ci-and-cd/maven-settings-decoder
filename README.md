@@ -22,14 +22,14 @@ Use as a command-line tool:
     java -jar target/maven-settings-decoder-*-exec.jar \
         -s "${HOME}/.m2/settings.xml" \
         -ss "${HOME}/.m2/settings-security.xml" \
-        -x "/settings/servers/server[id='local-nexus3-releases']/password/text()"
+        -x "/settings/servers/server[id='private-nexus3-releases']/password/text()"
     
     # or
     
     java -jar target/maven-settings-decoder-*-exec.jar \
         -s "${HOME}/.m2/settings.xml" \
         -ss "${HOME}/.m2/settings-security.xml" \
-        -x "//server[id='local-nexus3-releases']/password/text()"
+        -x "//server[id='private-nexus3-releases']/password/text()"
 
 Use as gradle buildscript dependency, so we can access maven's settings.xml from our build script:
 
