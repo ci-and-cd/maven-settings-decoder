@@ -21,6 +21,6 @@ echo -e "<<<<<<<<<< ---------- custom, override options ---------- <<<<<<<<<<\n"
 
 
 echo -e "\n>>>>>>>>>> ---------- call remote script ---------- >>>>>>>>>>"
-echo "curl -s -L ${CI_OPT_CI_SCRIPT} > /tmp/$(basename $(pwd))-lib_ci.sh && source /tmp/$(basename $(pwd))-lib_ci.sh"
-curl -s -L ${CI_OPT_CI_SCRIPT} > /tmp/$(basename $(pwd))-lib_ci.sh && source /tmp/$(basename $(pwd))-lib_ci.sh
+echo "set -e; curl -f -s -L ${CI_OPT_CI_SCRIPT} > /tmp/$(basename $(pwd))-lib_ci.sh; set +e; source /tmp/$(basename $(pwd))-lib_ci.sh"
+set -e; curl -f -s -L ${CI_OPT_CI_SCRIPT} > /tmp/$(basename $(pwd))-lib_ci.sh; set +e; source /tmp/$(basename $(pwd))-lib_ci.sh
 echo -e "<<<<<<<<<< ---------- call remote script ---------- <<<<<<<<<<\n"
