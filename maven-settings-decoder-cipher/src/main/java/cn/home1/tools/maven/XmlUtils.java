@@ -31,12 +31,16 @@ public final class XmlUtils {
     public static String xmlNodeText(
         final File file,
         final String xpathExpression
-    ) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException {
-        final Document doc = xmlDocument(file);
+    ) {
+        try {
+            final Document doc = xmlDocument(file);
 
-        final Object result = XPathFactory.newInstance().newXPath() //
-            .compile(xpathExpression) //
-            .evaluate(doc, XPathConstants.STRING);
-        return result != null ? result.toString() : null;
+            final Object result = XPathFactory.newInstance().newXPath() //
+                .compile(xpathExpression) //
+                .evaluate(doc, XPathConstants.STRING);
+            return result != null ? result.toString() : null;
+        } catch (final IOException | SAXException | ParserConfigurationException | XPathExpressionException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

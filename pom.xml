@@ -196,6 +196,7 @@
             <id>release-and-publish-to-ossrh</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
+                <property><name>!release-and-publish-to-github</name></property>
             </activation>
             <distributionManagement>
                 <repository>
@@ -348,10 +349,11 @@ EOF gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms gpg \-\-all
             <id>release-and-publish-to-github</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
+                <property><name>release-and-publish-to-github</name></property>
             </activation>
             <properties>
                 <!-- github server corresponds to entry in ~/.m2/settings.xml -->
-                <github.global.server>github-chshawkn</github.global.server>
+                <github.global.server>github</github.global.server>
             </properties>
             <!-- see: http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github -->
             <distributionManagement>

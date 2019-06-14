@@ -10,31 +10,43 @@ public class MavenSettingsSecurity {
 
     private final String plainTextMasterPassword;
 
-    public MavenSettingsSecurity(final boolean debug, final String encodedMasterPassword) throws PlexusCipherException {
+    public MavenSettingsSecurity(final boolean debug, final String encodedMasterPassword) {
         this.debug = debug;
-        this.plainTextMasterPassword = PlexusCipherUtils.decodeMasterPassword(encodedMasterPassword, debug);
+        try {
+            this.plainTextMasterPassword = PlexusCipherUtils.decodeMasterPassword(encodedMasterPassword, debug);
+        } catch (final PlexusCipherException ex) {
+            throw new IllegalArgumentException(encodedMasterPassword, ex);
+        }
     }
 
     public MavenSettingsSecurity(
         final String securityFilePathname,
         final boolean debug
-    ) throws Exception {
+    ) {
         this(debug, MavenSettingsSecurity.encodedMasterPassword(securityFilePathname));
     }
 
-    public String decodeText(final String text) throws PlexusCipherException {
-        return PlexusCipherUtils.decodeText(text, this.plainTextMasterPassword, this.debug);
+    public String decodeText(final String text) {
+        try {
+            return PlexusCipherUtils.decodeText(text, this.plainTextMasterPassword, this.debug);
+        } catch (final PlexusCipherException ex) {
+            throw new IllegalArgumentException(ex);
+        }
     }
 
-    public String encodeText(final String text) throws PlexusCipherException {
-        return PlexusCipherUtils.encodeText(text, this.plainTextMasterPassword, this.debug);
+    public String encodeText(final String text) {
+        try {
+            return PlexusCipherUtils.encodeText(text, this.plainTextMasterPassword, this.debug);
+        } catch (final PlexusCipherException ex) {
+            throw new IllegalArgumentException(ex);
+        }
     }
 
     public String getPlainTextMasterPassword() {
         return this.plainTextMasterPassword;
     }
 
-    public static String encodedMasterPassword(final String securityFilePathname) throws Exception {
+    public static String encodedMasterPassword(final String securityFilePathname) {
         final String result;
 
         final File securityFile = new File(securityFilePathname);
@@ -49,7 +61,7 @@ public class MavenSettingsSecurity {
         return result;
     }
 
-    static String encodedMasterPassword(final File file) throws Exception {
+    static String encodedMasterPassword(final File file) {
         return XmlUtils.xmlNodeText(file, "/settingsSecurity/master/text()");
     }
 }

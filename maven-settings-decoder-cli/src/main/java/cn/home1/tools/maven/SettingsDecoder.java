@@ -1,18 +1,12 @@
 package cn.home1.tools.maven;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.sonatype.plexus.components.cipher.PlexusCipherException;
-import org.xml.sax.SAXException;
 
 public class SettingsDecoder {
 
@@ -46,9 +40,7 @@ public class SettingsDecoder {
         this(null, null, false);
     }
 
-    public String getText(
-        final String xpathOpt
-    ) throws SAXException, PlexusCipherException, ParserConfigurationException, XPathExpressionException, IOException {
+    public String getText(final String xpathOpt) {
         return this.settings.getText(xpathOpt);
     }
 

@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonatype.plexus.components.cipher.PlexusCipherException;
 
 public class MavenSettingsSecurityTest {
 
@@ -22,17 +21,18 @@ public class MavenSettingsSecurityTest {
     }
 
     @Test
-    public void testEncodeAndDecode() throws PlexusCipherException {
+    public void testEncodeAndDecode() {
         this.check(this.encodedMasterPass, "str");
+        this.check(this.encodedMasterPass, " ");
     }
 
-    @Test(expected = PlexusCipherException.class)
-    public void testBlankStr() throws PlexusCipherException {
-        // nested exception: java.lang.ArrayIndexOutOfBoundsException
+    @Test(expected = IllegalArgumentException.class)
+    public void testBlankStr() {
+        // nested exception PlexusCipherException: java.lang.ArrayIndexOutOfBoundsException
         this.check(this.encodedMasterPass, "");
     }
 
-    private void check(final String encodedMasterPassword, final String str) throws PlexusCipherException {
+    private void check(final String encodedMasterPassword, final String str) {
         final MavenSettingsSecurity settingsSecurity = new MavenSettingsSecurity(this.debug, encodedMasterPassword);
         logger.info("encodedMasterPass: [{}]", encodedMasterPassword);
         final String encoded = settingsSecurity.encodeText(str);

@@ -5,14 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.io.xpp3.SettingsXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.sonatype.plexus.components.cipher.PlexusCipherException;
-import org.xml.sax.SAXException;
 
 public class MavenSettings {
 
@@ -38,9 +33,7 @@ public class MavenSettings {
         this.settings = readSettings(this.settingsFile);
     }
 
-    public String getText(
-        final String xpathExpression
-    ) throws SAXException, ParserConfigurationException, XPathExpressionException, IOException, PlexusCipherException {
+    public String getText(final String xpathExpression) {
         //final List<Server> servers = this.settings.getServers();
 
         final String nodeText = XmlUtils.xmlNodeText(this.settingsFile, xpathExpression);
@@ -51,7 +44,7 @@ public class MavenSettings {
         return this.nodeTextValue(nodeText);
     }
 
-    public String nodeTextValue(final String nodeText) throws PlexusCipherException {
+    public String nodeTextValue(final String nodeText) {
         final Boolean envVar = nodeText != null && nodeText.startsWith("${env.") && nodeText.endsWith("}");
 
         if (this.debug) {
