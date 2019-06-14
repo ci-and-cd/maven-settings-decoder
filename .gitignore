@@ -4,7 +4,6 @@
 .DS_Store
 .factorypath
 .idea/
-.mvn/
 .mvn/timing.properties
 .project
 .settings/

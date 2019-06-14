@@ -2,49 +2,68 @@
 addons:
   apt:
     packages:
-    - aria2
-    #- gnupg
-    - gnupg2
-    - graphviz
-    - openssl
+      - aria2
+      #- gnupg
+      - gnupg2
+      - graphviz
+      - openssl
+      - whois
 before_install:
-- aria2c --file-allocation=none -c -x 10 -s 10 -m 0 --console-log-level=notice --log-level=notice --summary-interval=0 -o apache-maven-3.5.3-bin.zip https://archive.apache.org/dist/maven/maven-3/3.5.3/binaries/apache-maven-3.5.3-bin.zip && unzip -qq apache-maven-3.5.3-bin.zip
-- export M2_HOME=$PWD/apache-maven-3.5.3
-- export PATH=$M2_HOME/bin:$PATH
+  - whois $(curl ipinfo.io/ip);
+  # on gpg-2.1.11 'pinentry-mode loopback' is invalid option
+  #- printf '%s\n' "pinentry-mode loopback" | tee -a ~/.gnupg/gpg.conf;
+  - export GPG_TTY=$(tty || echo "");
+    gpg2 --use-agent --batch=true --version;
+    mkdir -p ~/.gnupg && chmod 700 ~/.gnupg;
+    printf '%s\n' "use-agent" | tee ~/.gnupg/gpg.conf;
+    printf '%s\n' "allow-loopback-pinentry" | tee ~/.gnupg/gpg-agent.conf;
+    echo RELOADAGENT | gpg-connect-agent;
+    openssl aes-256-cbc -k ${CI_OPT_GPG_PASSPHRASE} -in codesigning.asc.enc -out codesigning.asc -d -md md5;
+    ls -ahl;
+    if [[ -f codesigning.pub ]]; then
+      gpg2 --use-agent --batch=true --yes --import codesigning.pub;
+      gpg2 --use-agent --batch=true --list-keys;
+    fi;
+    if [[ -f codesigning.pub ]]; then
+      gpg2 --use-agent --batch=true --yes --import codesigning.asc;
+    elif [[ -z "$(gpg2 --use-agent --list-secret-keys | { grep ${CI_OPT_GPG_KEYNAME} || true; })" ]]; then
+      gpg2 --use-agent --batch=true --yes --fast-import codesigning.asc;
+    fi;
+    gpg2 --use-agent --batch=true --list-secret-keys;
+    gpg2 --use-agent --batch=true --list-keys;
+    printf 'trust\n5\ny\n' | gpg2 --use-agent --batch=true --command-fd 0 --edit-key ${CI_OPT_GPG_KEYNAME};
 branches:
   only:
-  #- master # do nothing on master branch
-  - develop # snapshots on develop branch
-  - /^feature\/.*$/ # build and test on feature branches
-  - /^hotfix\/.*$/ # release on hotfix branches
-  - /^release\/.*$/ # release on release branches
-  #- /^v\d+\.\d+(\.\d+)?(-\S*)?/ # build and publish a github release (can skip tests here) or do nothing on version tags
+    #- master # do nothing on master branch
+    - develop # snapshots on develop branch
+    - /^feature\/.*$/ # build and test on feature branches
+    - /^hotfix\/.*$/ # release on hotfix branches
+    - /^release\/.*$/ # release on release branches
+    - /^support\/.*$/ # release on support branches
+    #- /^v\d+\.\d+(\.\d+)?(-\S*)?/ # build and publish a github release (can skip tests here) or do nothing on version tags
 cache:
+  bundler: true
   directories:
-  - "$HOME/.cache"
-  - "$HOME/.gradle"
-  - "$HOME/.m2"
-  - "$HOME/.sonar/cache"
-
-dist: trusty
+    - "$HOME/.cache"
+    - "$HOME/.gradle"
+    - "$HOME/.m2/repository"
+    - "$HOME/.m2/wrapper"
+    - "$HOME/.sonar/cache"
+dist: xenial
 env:
   global:
-  # i.e. CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/v0.2.1/src/main/ci-script/lib_ci.sh
-  - CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/v0.2.1/src/main/ci-script/lib_ci.sh
-  - CI_OPT_INFRASTRUCTURE=opensource
-  - MAVEN_SKIP_RC=true
+    - MAVEN_SKIP_RC=true
 group: edge
 install: true
 jdk:
-- oraclejdk8
-#- oraclejdk9
+  - openjdk8
 language: java
 script:
-# When prefixed with `travis_wait 30`, no log output until it is done.
-# see: https://github.com/travis-ci/travis-ci/issues/4190 or https://github.com/HaxeFoundation/hxcpp/issues/709
-- while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
-- bash ci.sh mvn clean install sonar:sonar deploy
-- kill %1
-services:
-- docker
-sudo: required
+  # When prefixed with `travis_wait 30`, no log output until it is done.
+  # see: https://github.com/travis-ci/travis-ci/issues/4190 or https://github.com/HaxeFoundation/hxcpp/issues/709
+  - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
+  - export CI_OPT_SONAR=true
+  - export CI_OPT_SONAR_ORGANIZATION="home1-oss-github"
+    ./mvnw -Dgpg.executable=gpg2 -Dgpg.loopback=true -s settings.xml clean deploy;
+  - kill %1
+sudo: false

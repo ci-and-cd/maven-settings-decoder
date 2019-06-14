@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                        http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <interactiveMode/>
+    <!-- org.springframework.cloud:spring-cloud-contract-maven-plugin can not substitute variables in localRepository tag correctly -->
+    <!--<localRepository>${user.home}/.m2/repository</localRepository>-->
+
+    <mirrors>
+        <!-- @formatter:off -->
+        <!-- Do not use variable substitution in mirrors when using an IDE, it does not works. -->
+        <!-- mirrorOf: pom.xml repositories repository id -->
+        <!--<mirrorOf>central</mirrorOf>-->
+        <!--<mirrorOf>external:*,!github-mvn-repo-wagon-maven-plugin</mirrorOf>-->
+        <!--<mirror><id>mirror</id><name>mirror</name><url>http://nexus3:28081/nexus/repository/maven-public/</url><mirrorOf>*</mirrorOf></mirror>-->
+        <!-- @formatter:on -->
+    </mirrors>
+
+    <offline/>
+
+    <pluginGroups>
+        <pluginGroup>org.apache.maven.plugins</pluginGroup>
+        <pluginGroup>org.apache.tomcat.maven</pluginGroup>
+        <pluginGroup>org.codehaus.mojo</pluginGroup>
+        <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+        <pluginGroup>org.springframework.boot</pluginGroup>
+    </pluginGroups>
+
+    <profiles>
+        <!-- @formatter:off -->
+        <profile>
+            <id>gpg-keyname</id>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <properties><gpg.keyname>${env.CI_OPT_GPG_KEYNAME}</gpg.keyname></properties>
+        </profile>
+        <!-- @formatter:on -->
+    </profiles>
+
+    <proxies>
+        <!--<proxy><id>http-proxy</id><active>true</active><protocol>http</protocol><host>127.0.0.1</host><port>8080</port><nonProxyHosts>127.0.0.1</nonProxyHosts></proxy>-->
+        <!--<proxy><id>http-proxy</id><active>true</active><protocol>socks5</protocol><host>127.0.0.1</host><port>1080</port><nonProxyHosts>127.0.0.1</nonProxyHosts></proxy>-->
+    </proxies>
+
+    <servers>
+        <!-- @formatter:off -->
+
+        <server>
+            <id>docker-hub</id>
+            <username>${env.CI_OPT_DOCKER_REGISTRY_USER}</username><password>${env.CI_OPT_DOCKER_REGISTRY_PASS}</password>
+            <configuration><email>${env.CI_OPT_DOCKER_DOCKERHUB_MAIL}</email></configuration>
+        </server>
+        <server><id>github</id><password>${env.CI_OPT_OPENSOURCE_GIT_AUTH_TOKEN}</password></server>
+        <!--
+        To fix issue: gpg: signing failed: Inappropriate ioctl for device
+        1.
+        ~/.gnupg/gpg.conf:
+        use-agent
+        pinentry-mode loopback
+        2.
+        ~/.gnupg/gpg-agent.conf:
+        allow-loopback-pinentry
+        3.
+        echo RELOADAGENT | gpg-connect-agent
+        -->
+        <server><id>gpg.passphrase</id><passphrase>${env.CI_OPT_GPG_PASSPHRASE}</passphrase></server>
+        <server><id>opensource-mvnsite</id><username>${env.CI_OPT_OPENSOURCE_MVNSITE_USERNAME}</username><password>${env.CI_OPT_OPENSOURCE_MVNSITE_PASSWORD}</password></server>
+        <server><id>OSSRH-snapshots</id><username>${env.CI_OPT_MAVEN_CENTRAL_USER}</username><password>${env.CI_OPT_MAVEN_CENTRAL_PASS}</password></server>
+        <server><id>OSSRH-staging</id><username>${env.CI_OPT_MAVEN_CENTRAL_USER}</username><password>${env.CI_OPT_MAVEN_CENTRAL_PASS}</password></server>
+
+        <server><id>nexus3:5000</id><username>deployment</username><password>{RJzAlz+tw54HBhZ3IBzFCuNQY2Wyzqv2EonquIV7hdE=}</password></server>
+        <!-- see: http://maven.apache.org/guides/mini/guide-encryption.html -->
+        <!-- mvn &#x002d;&#x002d;encrypt-password ${password} -->
+        <!-- accept RSA key fingerprint -->
+        <!-- ssh -o UserKnownHostsFile=~/.ssh/known_hosts root@mvnsite.local -p 10022 -->
+        <server>
+            <id>private-mvnsite</id>
+            <username>deployment</username><password>{RJzAlz+tw54HBhZ3IBzFCuNQY2Wyzqv2EonquIV7hdE=}</password>
+            <!--<username>root</username><passphrase>if required</passphrase><privateKey>${user.home}/.ssh/mvnsite.local</privateKey>-->
+            <configuration>
+                <!-- see: https://maven.apache.org/wagon/apidocs/index.html -->
+                <!-- java.lang.ClassNotFoundException: org.apache.maven.wagon.providers.ssh.knownhost.NullKnownHostProvider -->
+                <!--knownHostsProvider implementation="org.apache.maven.wagon.providers.ssh.knownhost.NullKnownHostProvider">
+                    <hostKeyChecking>no</hostKeyChecking>
+                </knownHostsProvider-->
+            </configuration>
+        </server>
+        <server><id>private-nexus3-releases</id><username>deployment</username><password>{RJzAlz+tw54HBhZ3IBzFCuNQY2Wyzqv2EonquIV7hdE=}</password></server>
+        <server><id>private-nexus3-snapshots</id><username>deployment</username><password>{RJzAlz+tw54HBhZ3IBzFCuNQY2Wyzqv2EonquIV7hdE=}</password></server>
+        <server><id>private-nexus3-thirdparty</id><username>deployment</username><password>{RJzAlz+tw54HBhZ3IBzFCuNQY2Wyzqv2EonquIV7hdE=}</password></server>
+        <!-- @formatter:on -->
+    </servers>
+
+    <usePluginRegistry/>
+</settings>

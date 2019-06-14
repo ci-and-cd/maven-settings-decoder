@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                        http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <interactiveMode/>
+
+    <mirrors>
+        <!-- @formatter:off -->
+        <!-- @formatter:on -->
+    </mirrors>
+
+    <offline/>
+
+    <pluginGroups>
+        <pluginGroup>org.apache.maven.plugins</pluginGroup>
+        <pluginGroup>org.apache.tomcat.maven</pluginGroup>
+        <pluginGroup>org.codehaus.mojo</pluginGroup>
+        <pluginGroup>org.owasp</pluginGroup>
+        <pluginGroup>org.reficio</pluginGroup>
+        <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+        <pluginGroup>org.springframework.boot</pluginGroup>
+        <pluginGroup>com.github.ferstl</pluginGroup>
+        <pluginGroup>com.github.spotbugs</pluginGroup>
+        <pluginGroup>io.quarkus</pluginGroup>
+        <pluginGroup>io.takari</pluginGroup>
+    </pluginGroups>
+
+    <!-- @formatter:off -->
+    <profiles>
+        <profile>
+            <id>gpg-keyname</id>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <properties><gpg.keyname>${env.CI_OPT_GPG_KEYNAME}</gpg.keyname></properties>
+        </profile>
+    </profiles>
+    <!-- @formatter:on -->
+
+    <proxies>
+    </proxies>
+
+    <servers>
+        <!-- @formatter:off -->
+        <server><id>gpg.passphrase</id><passphrase>${env.CI_OPT_GPG_PASSPHRASE}</passphrase></server>
+        <server><id>OSSRH-snapshots</id><username>${env.CI_OPT_MAVEN_CENTRAL_USER}</username><password>${env.CI_OPT_MAVEN_CENTRAL_PASS}</password></server>
+        <server><id>OSSRH-staging</id><username>${env.CI_OPT_MAVEN_CENTRAL_USER}</username><password>${env.CI_OPT_MAVEN_CENTRAL_PASS}</password></server>
+        <!-- @formatter:on -->
+    </servers>
+
+    <usePluginRegistry/>
+</settings>
