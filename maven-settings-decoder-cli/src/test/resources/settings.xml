@@ -66,8 +66,8 @@
         -->
         <server><id>gpg.passphrase</id><passphrase>${env.CI_OPT_GPG_PASSPHRASE}</passphrase></server>
         <server><id>opensource-mvnsite</id><username>${env.CI_OPT_OPENSOURCE_MVNSITE_USERNAME}</username><password>${env.CI_OPT_OPENSOURCE_MVNSITE_PASSWORD}</password></server>
-        <server><id>OSSRH-snapshots</id><username>${env.CI_OPT_MAVEN_CENTRAL_USER}</username><password>${env.CI_OPT_MAVEN_CENTRAL_PASS}</password></server>
-        <server><id>OSSRH-staging</id><username>${env.CI_OPT_MAVEN_CENTRAL_USER}</username><password>${env.CI_OPT_MAVEN_CENTRAL_PASS}</password></server>
+        <server><id>ossrh-snapshots</id><username>${env.CI_OPT_OSSRH_NEXUS2_USER}</username><password>${env.CI_OPT_OSSRH_NEXUS2_PASS}</password></server>
+        <server><id>ossrh-staging</id><username>${env.CI_OPT_OSSRH_NEXUS2_USER}</username><password>${env.CI_OPT_OSSRH_NEXUS2_PASS}</password></server>
 
         <server><id>nexus3:5000</id><username>deployment</username><password>{RJzAlz+tw54HBhZ3IBzFCuNQY2Wyzqv2EonquIV7hdE=}</password></server>
         <!-- see: http://maven.apache.org/guides/mini/guide-encryption.html -->

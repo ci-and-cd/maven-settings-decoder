@@ -33,14 +33,14 @@ public class SettingsDecoderTest {
         final File settingsFile = dumpClasspathResourceIntoTmpFile("/settings.xml");
         final File settingsSecurityFile = dumpClasspathResourceIntoTmpFile("/settings-security.xml");
         //final String expression = "//server[id='github']/password/text()";
-        final String expression = "//server[id='OSSRH-snapshots']/username/text()";
+        final String expression = "//server[id='ossrh-snapshots']/username/text()";
         final String plainText = new SettingsDecoder( //
             settingsFile.getCanonicalPath(), //
             settingsSecurityFile.getCanonicalPath(), //
             true //
         ).getText(expression);
         System.out.println(plainText);
-        assertNotNull("ensure environment variables CI_OPT_MAVEN_CENTRAL_USER and CI_OPT_MAVEN_CENTRAL_PASS are set.", plainText);
+        assertNotNull("ensure environment variables CI_OPT_OSSRH_NEXUS2_USER and CI_OPT_OSSRH_NEXUS2_PASS are set.", plainText);
         assertNotEquals("", plainText);
         assertFalse(plainText.startsWith("${env.") && plainText.endsWith("}"));
     }
