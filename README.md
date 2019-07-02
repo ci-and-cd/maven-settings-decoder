@@ -54,5 +54,6 @@ Use as gradle buildscript dependency, so we can access maven's settings.xml from
 ### Build this package
 
 ```bash
-CI_OPT_OSSRH_NEXUS2_USER=user CI_OPT_OSSRH_NEXUS2_PASS=password ./mvnw -s settings.xml clean install
+./mvnw -s settings.xml clean install
+CI_OPT_OSSRH_NEXUS2_USER=user CI_OPT_OSSRH_NEXUS2_PASS=password ./mvnw -Dgpg.executable=gpg -Dgpg.loopback=true -s settings.xml clean deploy
 ```

@@ -174,7 +174,7 @@
         </profile>
         <profile>
             <id>gpg-for-travis-and-maven-central</id>
-            <activation><file><exists>${maven.multiModuleProjectDirectory}/codesigning.asc</exists></file><activeByDefault>false</activeByDefault></activation>
+            <activation><property><name>gpg.executable</name></property></activation>
             <properties>
                 <!-- Do not set gpg.executable here -->
                 <!--<gpg.executable>gpg</gpg.executable>-->
