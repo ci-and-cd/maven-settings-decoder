@@ -40,7 +40,7 @@ Use as gradle buildscript dependency, so we can access maven's settings.xml from
           //maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
           dependencies {
             ...
-            classpath 'cn.home1.tools:maven-settings-decoder-cli:1.0.6.OSS-SNAPSHOT'
+            classpath 'cn.home1.tools:maven-settings-decoder-cli:1.1.0'
           }
         }
         ...
@@ -54,5 +54,6 @@ Use as gradle buildscript dependency, so we can access maven's settings.xml from
 ### Build this package
 
 ```bash
-CI_OPT_OSSRH_NEXUS2_USER=user CI_OPT_OSSRH_NEXUS2_PASS=password ./mvnw -s settings.xml clean install
+./mvnw -s settings.xml clean install
+CI_OPT_OSSRH_NEXUS2_USER=user CI_OPT_OSSRH_NEXUS2_PASS=password ./mvnw -Dgpg.executable=gpg -Dgpg.loopback=true -s settings.xml clean deploy
 ```

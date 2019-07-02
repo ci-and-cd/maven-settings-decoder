@@ -8,7 +8,7 @@
     <name>maven-settings-decoder</name>
     <packaging>pom</packaging>
     <url>https://github.com/ci-and-cd/maven-settings-decoder</url>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0</version>
 
     <ciManagement>
         <system>Travis CI</system>
@@ -174,7 +174,7 @@
         </profile>
         <profile>
             <id>gpg-for-travis-and-maven-central</id>
-            <activation><file><exists>${maven.multiModuleProjectDirectory}/codesigning.asc</exists></file><activeByDefault>false</activeByDefault></activation>
+            <activation><property><name>gpg.executable</name></property></activation>
             <properties>
                 <!-- Do not set gpg.executable here -->
                 <!--<gpg.executable>gpg</gpg.executable>-->
@@ -261,7 +261,7 @@
                         <configuration>
                             <serverId>ossrh-snapshots</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
                 </plugins>
