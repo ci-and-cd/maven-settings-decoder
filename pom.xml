@@ -6,9 +6,9 @@
     <description>maven settings.xml decoder for gradle</description>
     <groupId>cn.home1.tools</groupId>
     <name>maven-settings-decoder</name>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <url>https://github.com/ci-and-cd/maven-settings-decoder</url>
-    <version>1.0.6.OSS</version>
+    <version>1.1.0</version>
 
     <ciManagement>
         <system>Travis CI</system>
@@ -35,6 +35,12 @@
         </license>
     </licenses>
 
+    <modules>
+        <module>maven-settings-decoder-cipher</module>
+        <module>maven-settings-decoder-cli</module>
+        <module>maven-settings-decoder-core</module>
+    </modules>
+
     <scm>
         <connection>scm:git:https://github.com/ci-and-cd/maven-settings-decoder.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/ci-and-cd/maven-settings-decoder.git</developerConnection>
@@ -49,6 +55,19 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <sonar.host.url>https://sonarqube.com</sonar.host.url>
+
+        <version.maven-assembly-plugin>3.0.0</version.maven-assembly-plugin>
+        <version.maven-compiler-plugin>3.5.1</version.maven-compiler-plugin>
+        <version.maven-gpg-plugin>1.6</version.maven-gpg-plugin>
+        <version.maven-jar-plugin>3.0.2</version.maven-jar-plugin>
+        <version.maven-shade-plugin>2.4.3</version.maven-shade-plugin>
+        <version.gitflow-maven-plugin>1.11.0</version.gitflow-maven-plugin>
+
+        <version.commons-cli>1.3.1</version.commons-cli>
+        <version.junit>4.12</version.junit>
+        <version.logback>1.2.3</version.logback>
+        <version.maven-settings>3.3.9</version.maven-settings>
+        <version.plexus-cipher>1.7</version.plexus-cipher>
     </properties>
 
     <build>
@@ -57,7 +76,6 @@
             <plugin>
                 <groupId>com.amashchenko.maven.plugin</groupId>
                 <artifactId>gitflow-maven-plugin</artifactId>
-                <version>1.2.1</version>
                 <configuration>
                     <tychoBuild>false</tychoBuild>
 
@@ -91,7 +109,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -101,137 +118,98 @@
                     <showWarnings>true</showWarnings>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>cn.home1.tools.maven.SettingsDecoder</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <!--plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>SettingsDecoder</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>assembly-jar-with-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>true</minimizeJar>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <shadedClassifierName>exec</shadedClassifierName>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.amashchenko.maven.plugin</groupId>
+                    <artifactId>gitflow-maven-plugin</artifactId>
+                    <version>${version.gitflow-maven-plugin}</version>
+                </plugin>
+                <plugin><artifactId>maven-assembly-plugin</artifactId><version>${version.maven-assembly-plugin}</version></plugin>
+                <plugin><artifactId>maven-compiler-plugin</artifactId><version>${version.maven-compiler-plugin}</version></plugin>
+                <plugin><artifactId>maven-gpg-plugin</artifactId><version>${version.maven-gpg-plugin}</version></plugin>
+                <plugin><artifactId>maven-jar-plugin</artifactId><version>${version.maven-jar-plugin}</version></plugin>
+                <plugin><artifactId>maven-shade-plugin</artifactId><version>${version.maven-shade-plugin}</version></plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <dependencies>
-        <!--dependency>
-            <groupId>org.sonatype.plexus</groupId>
-            <artifactId>plexus-sec-dispatcher</artifactId>
-            <version>1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.sonatype.sisu</groupId>
-            <artifactId>sisu-inject-plexus</artifactId>
-            <version>2.6.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-settings</artifactId>
-            <version>3.0.4</version>
-        </dependency-->
-
-        <dependency>
-            <groupId>org.sonatype.plexus</groupId>
-            <artifactId>plexus-cipher</artifactId>
-            <version>1.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-settings</artifactId>
-            <version>3.3.9</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-cli</groupId>
-            <artifactId>commons-cli</artifactId>
-            <version>1.3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
+        <dependency><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>junit</groupId><artifactId>junit</artifactId><scope>test</scope></dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency><groupId>${project.groupId}</groupId><artifactId>maven-settings-decoder-cipher</artifactId><version>${project.version}</version></dependency>
+            <dependency><groupId>${project.groupId}</groupId><artifactId>maven-settings-decoder-core</artifactId><version>${project.version}</version></dependency>
+            <dependency><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><version>${version.logback}</version></dependency>
+            <dependency><groupId>commons-cli</groupId><artifactId>commons-cli</artifactId><version>${version.commons-cli}</version></dependency>
+            <dependency><groupId>org.apache.maven</groupId><artifactId>maven-settings</artifactId><version>${version.maven-settings}</version></dependency>
+            <dependency><groupId>org.sonatype.plexus</groupId><artifactId>plexus-cipher</artifactId><version>${version.plexus-cipher}</version></dependency>
+
+            <dependency><groupId>junit</groupId><artifactId>junit</artifactId><version>${version.junit}</version></dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <profiles>
+        <profile>
+            <id>gpg2-arguments</id>
+            <activation><property><name>gpg.loopback</name><value>true</value></property></activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <configuration>
+                            <gpgArguments>
+                                <gpgArgument>--use-agent</gpgArgument>
+                                <gpgArgument>--pinentry-mode</gpgArgument>
+                                <gpgArgument>loopback</gpgArgument>
+                            </gpgArguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>gpg-for-travis-and-maven-central</id>
+            <activation><property><name>gpg.executable</name></property></activation>
+            <properties>
+                <!-- Do not set gpg.executable here -->
+                <!--<gpg.executable>gpg</gpg.executable>-->
+                <gpg.keyname>${env.CI_OPT_GPG_KEYNAME}</gpg.keyname>
+                <gpg.passphrase>${env.CI_OPT_GPG_PASSPHRASE}</gpg.passphrase>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution><id>sign-artifacts</id><phase>verify</phase><goals><goal>sign</goal></goals></execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>release-and-publish-to-ossrh</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
+                <property><name>!release-and-publish-to-github</name></property>
             </activation>
             <distributionManagement>
                 <repository>
-                    <id>OSSRH-staging</id>
-                    <name>OSSRH staging</name>
+                    <id>ossrh-staging</id>
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
                 </repository>
                 <snapshotRepository>
-                    <id>OSSRH-snapshots</id>
-                    <name>OSSRH snapshots</name>
+                    <id>ossrh-snapshots</id>
                     <url>https://oss.sonatype.org/content/repositories/snapshots</url>
                 </snapshotRepository>
             </distributionManagement>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
@@ -281,9 +259,9 @@
                         <version>1.6.8</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>OSSRH-snapshots</serverId>
+                            <serverId>ossrh-snapshots</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -371,10 +349,11 @@ EOF gpg2 \-\-batch \-\-gen-key maven_gpg_key_with_default_algorithms gpg \-\-all
             <id>release-and-publish-to-github</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
+                <property><name>release-and-publish-to-github</name></property>
             </activation>
             <properties>
                 <!-- github server corresponds to entry in ~/.m2/settings.xml -->
-                <github.global.server>github-chshawkn</github.global.server>
+                <github.global.server>github</github.global.server>
             </properties>
             <!-- see: http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github -->
             <distributionManagement>
