@@ -62,8 +62,6 @@ script:
   # When prefixed with `travis_wait 30`, no log output until it is done.
   # see: https://github.com/travis-ci/travis-ci/issues/4190 or https://github.com/HaxeFoundation/hxcpp/issues/709
   - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
-  - export CI_OPT_SONAR=true;
-  - export CI_OPT_SONAR_ORGANIZATION="home1-oss-github";
   - ./mvnw -Dgpg.executable=gpg2 -Dgpg.loopback=true -s settings.xml help:active-profiles clean deploy;
   - kill %1
 sudo: false
