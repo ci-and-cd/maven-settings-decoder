@@ -40,7 +40,7 @@ Use as gradle buildscript dependency, so we can access maven's settings.xml from
           //maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
           dependencies {
             ...
-            classpath 'cn.home1.tools:maven-settings-decoder-cli:1.0.6.OSS-SNAPSHOT'
+            classpath 'cn.home1.tools:maven-settings-decoder-cli:1.1.0'
           }
         }
         ...
