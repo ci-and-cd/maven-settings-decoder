@@ -21,9 +21,16 @@
     <offline/>
 
     <pluginGroups>
+        <pluginGroup>com.amashchenko.maven.plugin</pluginGroup>
+        <pluginGroup>com.github.ferstl</pluginGroup>
+        <pluginGroup>com.github.spotbugs</pluginGroup>
+        <pluginGroup>io.quarkus</pluginGroup>
+        <pluginGroup>io.takari</pluginGroup>
         <pluginGroup>org.apache.maven.plugins</pluginGroup>
         <pluginGroup>org.apache.tomcat.maven</pluginGroup>
         <pluginGroup>org.codehaus.mojo</pluginGroup>
+        <pluginGroup>org.owasp</pluginGroup>
+        <pluginGroup>org.reficio</pluginGroup>
         <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
         <pluginGroup>org.springframework.boot</pluginGroup>
     </pluginGroups>
