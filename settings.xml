@@ -43,8 +43,8 @@
     <servers>
         <!-- @formatter:off -->
         <server><id>gpg.passphrase</id><passphrase>${env.CI_OPT_GPG_PASSPHRASE}</passphrase></server>
-        <server><id>ossrh-snapshots</id><username>${env.CI_OPT_OSSRH_NEXUS2_USER}</username><password>${env.CI_OPT_OSSRH_NEXUS2_PASS}</password></server>
-        <server><id>ossrh-staging</id><username>${env.CI_OPT_OSSRH_NEXUS2_USER}</username><password>${env.CI_OPT_OSSRH_NEXUS2_PASS}</password></server>
+        <server><id>ossrh-nexus2-snapshots</id><username>${env.CI_OPT_OSSRH_NEXUS2_USER}</username><password>${env.CI_OPT_OSSRH_NEXUS2_PASS}</password></server>
+        <server><id>ossrh-nexus2-staging</id><username>${env.CI_OPT_OSSRH_NEXUS2_USER}</username><password>${env.CI_OPT_OSSRH_NEXUS2_PASS}</password></server>
         <!-- @formatter:on -->
     </servers>
 

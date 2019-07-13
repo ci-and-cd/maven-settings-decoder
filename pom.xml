@@ -200,11 +200,11 @@
             </activation>
             <distributionManagement>
                 <repository>
-                    <id>ossrh-staging</id>
+                    <id>ossrh-nexus2-staging</id>
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
                 </repository>
                 <snapshotRepository>
-                    <id>ossrh-snapshots</id>
+                    <id>ossrh-nexus2-snapshots</id>
                     <url>https://oss.sonatype.org/content/repositories/snapshots</url>
                 </snapshotRepository>
             </distributionManagement>
@@ -259,7 +259,7 @@
                         <version>1.6.8</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh-snapshots</serverId>
+                            <serverId>ossrh-nexus2-snapshots</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>false</autoReleaseAfterClose>
                         </configuration>
