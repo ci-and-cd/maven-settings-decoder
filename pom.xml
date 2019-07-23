@@ -54,7 +54,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <sonar.host.url>https://sonarqube.com</sonar.host.url>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
         <version.maven-assembly-plugin>3.0.0</version.maven-assembly-plugin>
         <version.maven-compiler-plugin>3.5.1</version.maven-compiler-plugin>
