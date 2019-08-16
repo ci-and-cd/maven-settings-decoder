@@ -1,7 +1,5 @@
 package cn.home1.tools.maven;
 
-import java.io.File;
-
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
 
 public class MavenSettingsSecurity {
@@ -17,13 +15,6 @@ public class MavenSettingsSecurity {
         } catch (final PlexusCipherException ex) {
             throw new IllegalArgumentException(encodedMasterPassword, ex);
         }
-    }
-
-    public MavenSettingsSecurity(
-        final String securityFilePathname,
-        final boolean debug
-    ) {
-        this(debug, MavenSettingsSecurity.encodedMasterPassword(securityFilePathname));
     }
 
     public String decodeText(final String text) {
@@ -44,24 +35,5 @@ public class MavenSettingsSecurity {
 
     public String getPlainTextMasterPassword() {
         return this.plainTextMasterPassword;
-    }
-
-    public static String encodedMasterPassword(final String securityFilePathname) {
-        final String result;
-
-        final File securityFile = new File(securityFilePathname);
-        if (!securityFile.exists()) {
-            //throw new IllegalArgumentException( //
-            //    String.format("Security file : %s does not exist%n", securityFile.getAbsolutePath()));
-            result = null;
-        } else {
-            result = encodedMasterPassword(securityFile);
-        }
-
-        return result;
-    }
-
-    static String encodedMasterPassword(final File file) {
-        return XmlUtils.xmlNodeText(file, "/settingsSecurity/master/text()");
     }
 }

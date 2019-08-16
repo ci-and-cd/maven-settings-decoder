@@ -1,5 +1,7 @@
 package cn.home1.tools.maven;
 
+import static cn.home1.tools.maven.MavenSettingsSecurityFactory.newMavenSettingsSecurity;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +30,7 @@ public class SettingsDecoder {
         final String securityFileOpt,
         final boolean debug //
     ) throws Exception {
-        final MavenSettingsSecurity settingsSecurity = new MavenSettingsSecurity(securityFilePathname(securityFileOpt), debug);
+        final MavenSettingsSecurity settingsSecurity = newMavenSettingsSecurity(securityFilePathname(securityFileOpt), debug);
         if (debug) {
             System.err.printf("masterPassword:%s%n", settingsSecurity.getPlainTextMasterPassword());
         }

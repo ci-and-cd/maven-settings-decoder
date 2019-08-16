@@ -23,7 +23,7 @@ public class SettingsDecoderTest {
     @Test
     public void testMasterPassword() throws Exception {
         final File targetFile = dumpClasspathResourceIntoTmpFile("/settings-security.xml");
-        final String encodedMasterPassword = MavenSettingsSecurity.encodedMasterPassword(targetFile);
+        final String encodedMasterPassword = MavenSettingsSecurityFactory.encodedMasterPassword(targetFile);
         System.out.println(encodedMasterPassword);
         System.out.println(PlexusCipherUtils.decodeMasterPassword(encodedMasterPassword, true));
     }
