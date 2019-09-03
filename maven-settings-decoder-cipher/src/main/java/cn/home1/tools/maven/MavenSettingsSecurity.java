@@ -36,4 +36,10 @@ public class MavenSettingsSecurity {
     public String getPlainTextMasterPassword() {
         return this.plainTextMasterPassword;
     }
+
+    public static String surroundByBrackets(final String text) {
+        return text.startsWith("{") && text.endsWith("}")
+            ? text
+            : "{" + text.replace("{", "\\{").replace("}", "\\}") + "}";
+    }
 }
