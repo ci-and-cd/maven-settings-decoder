@@ -64,7 +64,7 @@
         <version.gitflow-maven-plugin>1.11.0</version.gitflow-maven-plugin>
 
         <version.commons-cli>1.3.1</version.commons-cli>
-        <version.junit>4.12</version.junit>
+        <version.junit>4.13.1</version.junit>
         <version.logback>1.2.3</version.logback>
         <version.maven-settings>3.3.9</version.maven-settings>
         <version.plexus-cipher>1.7</version.plexus-cipher>
